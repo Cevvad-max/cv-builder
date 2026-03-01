@@ -1,0 +1,2248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV Maker Pro • Premium Templates + Sample CVs (Autofill)</title>
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- html2pdf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- FileSaver -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .a4 { width: 850px; min-height: 1123px; box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5); }
+    .glass { background: rgba(255,255,255,0.06); backdrop-filter: blur(16px); }
+    .fab { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    .fab:hover { transform: scale(1.05); }
+    .chip { transition: all 0.2s ease; }
+    .toast { animation: slideUp 0.25s ease forwards; }
+    @keyframes slideUp { from { transform: translateY(18px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    input, textarea { outline: none; }
+    input:focus, textarea:focus { box-shadow: 0 0 0 2px rgba(16,185,129,0.35); border-color: rgba(16,185,129,0.8)!important; }
+
+    .tpl-iframe { width: 100%; height: 1123px; border: 0; border-radius: 16px; background: white; }
+
+    details summary { list-style: none; cursor: pointer; }
+    details summary::-webkit-details-marker { display:none; }
+  </style>
+</head>
+
+<body class="bg-zinc-950 text-white min-h-screen overflow-x-hidden">
+
+<div class="max-w-screen-2xl mx-auto">
+
+  <nav class="border-b border-zinc-800 bg-zinc-900 sticky top-0 z-50">
+    <div class="px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="w-9 h-9 bg-emerald-500 rounded-2xl flex items-center justify-center text-2xl font-black">CV</div>
+        <div>
+          <h1 class="text-2xl font-bold tracking-tighter">CV Maker Pro</h1>
+          <p class="text-xs text-emerald-400 -mt-1">ATS Optimized • Sample CVs Autoload • PDF/Word Export</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-6 text-sm">
+        <button onclick="showTemplates()" class="flex items-center gap-2 hover:text-emerald-400 transition-colors">
+          <i class="fas fa-th-large"></i> Templates
+        </button>
+        <div class="h-6 w-px bg-zinc-700"></div>
+
+        <button onclick="exportPDF()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-semibold flex items-center gap-2">
+          <i class="fas fa-download"></i> PDF (Preview)
+        </button>
+      </div>
+    </div>
+  </nav>
+
+<div class="flex h-[calc(100vh-73px)] flex-col lg:flex-row">
+
+    <!-- LEFT EDITOR -->
+    <div class="w-full lg:w-96 border-r border-zinc-800 bg-zinc-900 overflow-auto p-4 sm:p-6 lg:p-7 space-y-10">
+
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-semibold flex items-center gap-3">
+          <i class="fas fa-user-circle text-emerald-400"></i> Editor (Autofills from Sample)
+        </h2>
+        <div id="completion" class="text-xs bg-emerald-900 text-emerald-400 px-3 py-1 rounded-2xl font-medium"></div>
+      </div>
+
+      <!-- Photo -->
+      <div class="space-y-6">
+        <div class="flex justify-center relative">
+          <label class="cursor-pointer group">
+            <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handlePhoto(this)">
+            <div id="photoPreview" class="w-28 h-28 bg-zinc-800 rounded-3xl border-2 border-dashed border-zinc-700 flex items-center justify-center overflow-hidden group-hover:border-emerald-500 transition-colors">
+              <i class="fas fa-camera text-3xl text-zinc-500"></i>
+            </div>
+          </label>
+          <button onclick="removePhoto()" id="removePhotoBtn" class="hidden absolute -top-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">×</button>
+        </div>
+
+        <input id="name" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 sm:px-5 sm:py-4 text-lg font-medium focus:border-emerald-500" placeholder="Full Name">
+        <input id="title" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 sm:px-5 sm:py-4 focus:border-emerald-500" placeholder="Professional Title">
+
+        <div class="grid grid-cols-2 gap-4">
+          <input id="phone" class="bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 sm:px-5 sm:py-4 focus:border-emerald-500" placeholder="Phone">
+          <input id="email" class="bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 sm:px-5 sm:py-4 focus:border-emerald-500" placeholder="Email">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <input id="linkedin" class="bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 sm:px-5 sm:py-4 focus:border-emerald-500" placeholder="LinkedIn (e.g. linkedin.com/in/...)">
+          <input id="website" class="bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 sm:px-5 sm:py-4 focus:border-emerald-500" placeholder="Website (optional)">
+        </div>
+
+        <input id="location" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 sm:px-5 sm:py-4 focus:border-emerald-500" placeholder="Location">
+
+        <textarea id="summary" rows="4" class="w-full bg-zinc-800 border border-zinc-700 rounded-3xl px-4 py-3 sm:px-5 sm:py-4 text-sm focus:border-emerald-500" placeholder="Professional summary..."></textarea>
+      </div>
+
+      <!-- Collapsible extra sections (so “missing” sections are still editable) -->
+      <details open class="glass border border-zinc-700 rounded-3xl p-5">
+        <summary class="flex items-center justify-between">
+          <div class="font-semibold flex items-center gap-2"><i class="fa-solid fa-id-card-clip text-emerald-300"></i> Personal Details</div>
+          <i class="fa-solid fa-chevron-down text-zinc-400"></i>
+        </summary>
+        <div class="mt-4 grid grid-cols-2 gap-3">
+          <input id="nationality" class="bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 text-sm" placeholder="Nationality">
+          <input id="dob" class="bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 text-sm" placeholder="Date of Birth">
+          <input id="maritalStatus" class="bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 text-sm" placeholder="Marital Status">
+          <input id="relocation" class="bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 text-sm" placeholder="Willing to Relocate (Yes/No)">
+          <input id="noticePeriod" class="bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 text-sm col-span-2" placeholder="Notice Period (e.g. Immediate / 2 weeks)">
+        </div>
+      </details>
+
+      <!-- Experience -->
+      <div>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-medium flex items-center gap-2"><i class="fas fa-briefcase"></i> Experience</h3>
+          <button onclick="addExp()" class="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+        <div id="expContainer" class="space-y-4"></div>
+      </div>
+
+      <!-- Education -->
+      <div>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-medium flex items-center gap-2"><i class="fas fa-graduation-cap"></i> Education</h3>
+          <button onclick="addEdu()" class="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+        <div id="eduContainer" class="space-y-4"></div>
+      </div>
+
+      <!-- Highlights -->
+      <div>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-medium flex items-center gap-2"><i class="fa-solid fa-star"></i> Key Highlights</h3>
+          <button onclick="addHighlight()" class="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+        <div id="highlightsContainer" class="space-y-3"></div>
+      </div>
+
+      <!-- Certifications -->
+      <div>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-medium flex items-center gap-2"><i class="fa-solid fa-certificate"></i> Certifications</h3>
+          <button onclick="addCertification()" class="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+        <div id="certsContainer" class="space-y-4"></div>
+      </div>
+
+      <!-- Publications -->
+      <div>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-medium flex items-center gap-2"><i class="fa-solid fa-book"></i> Publications</h3>
+          <button onclick="addPublication()" class="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+        <div id="pubsContainer" class="space-y-4"></div>
+      </div>
+
+      <!-- Conferences -->
+      <div>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-medium flex items-center gap-2"><i class="fa-solid fa-microphone"></i> Conference Presentations</h3>
+          <button onclick="addPresentation()" class="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+        <div id="presentationsContainer" class="space-y-4"></div>
+      </div>
+
+      <!-- Grants -->
+      <div>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-medium flex items-center gap-2"><i class="fa-solid fa-hand-holding-dollar"></i> Grants & Fellowships</h3>
+          <button onclick="addGrant()" class="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+        <div id="grantsContainer" class="space-y-4"></div>
+      </div>
+
+      <!-- Memberships -->
+      <div>
+        <h3 class="font-medium mb-3 flex items-center gap-2"><i class="fa-solid fa-users"></i> Memberships</h3>
+        <div id="membershipsContainer" class="flex flex-wrap gap-2 mb-3"></div>
+        <div class="flex gap-2">
+          <input id="newMembership" class="flex-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-5 py-3 text-sm" placeholder="e.g. TESOL International Association — Member">
+          <button onclick="addMembership()" class="px-6 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-medium">Add</button>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div>
+        <h3 class="font-medium mb-3 flex items-center gap-2"><i class="fas fa-tools"></i> Skills</h3>
+        <div id="skillsContainer" class="flex flex-wrap gap-2 mb-3"></div>
+        <div class="flex gap-2">
+          <input id="newSkill" class="flex-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-5 py-3 text-sm" placeholder="New skill (e.g. Public Speaking)">
+          <button onclick="addSkill()" class="px-6 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-medium">Add</button>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div>
+        <h3 class="font-medium mb-3 flex items-center gap-2"><i class="fas fa-globe"></i> Languages</h3>
+        <div id="languagesContainer" class="flex flex-wrap gap-2 mb-3"></div>
+        <div class="flex gap-2">
+          <input id="newLanguage" class="flex-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-5 py-3 text-sm" placeholder="e.g. English (Fluent)">
+          <button onclick="addLanguage()" class="px-6 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-medium">Add</button>
+        </div>
+      </div>
+
+      <!-- References -->
+      <div>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-medium flex items-center gap-2"><i class="fa-solid fa-address-book"></i> References</h3>
+          <button onclick="addReference()" class="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+        <div id="refsContainer" class="space-y-4"></div>
+        <textarea id="referencesNote" rows="2" class="w-full bg-zinc-800 border border-zinc-700 rounded-3xl px-5 py-3 text-sm focus:border-emerald-500" placeholder="Optional note (e.g. Additional referees available on request)"></textarea>
+      </div>
+
+    </div>
+
+    <!-- LIVE PREVIEW -->
+<div id="previewPane" class="flex-1 bg-zinc-950 overflow-hidden">
+  <div class="p-4 sm:p-6 lg:p-8">
+    <div class="sticky top-4]">
+      <div class="flex justify-center items-start">
+        <div id="previewScaleWrap" class="origin-top">
+          <div id="previewShell"
+            class="a4 bg-white text-zinc-900 p-8 sm:p-10 lg:p-12 text-[13.8px] leading-relaxed shadow-inner rounded-2xl overflow-hidden">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- RIGHT TEMPLATES -->
+    <div class="hidden lg:block w-80 border-l border-zinc-800 bg-zinc-900 p-6 overflow-auto">
+      <h3 class="font-semibold mb-2 text-center">Sample CVs (Click = Autofill + Preview)</h3>
+      <p class="text-xs text-zinc-400 text-center mb-6">Loads the exact sample text + layout, then you edit.</p>
+      <div class="grid grid-cols-1 gap-4" id="templateGallery"></div>
+
+      <div class="mt-6 p-4 rounded-2xl border border-zinc-800 bg-zinc-950/40 text-xs text-zinc-300 leading-relaxed">
+        <div class="font-semibold text-white mb-1"><i class="fas fa-bolt text-emerald-400"></i> Pro tips</div>
+        <ul class="list-disc ml-4 space-y-1">
+          <li>Pick a sample → preview + editor autofill.</li>
+          <li>PDF export uses the current Preview.</li>
+          <li>Word export uses the current Template HTML (best fidelity).</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FLOATING ACTION BAR -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-zinc-900 border border-zinc-700 rounded-3xl shadow-2xl flex items-center gap-2 px-5 py-3.5 z-50 shadow-emerald-950/50">
+  <button onclick="resetForm()" class="fab flex items-center gap-2 px-5 py-3 hover:bg-zinc-800 rounded-2xl text-sm font-medium">
+    <i class="fas fa-undo"></i> Reset
+  </button>
+  <button onclick="loadSample('ats')" class="fab flex items-center gap-2 px-5 py-3 hover:bg-zinc-800 rounded-2xl text-sm font-medium">
+    <i class="fas fa-file-import"></i> Load ATS Sample
+  </button>
+  <button onclick="exportPDF()" class="fab flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-semibold">
+    <i class="fas fa-file-pdf"></i> PDF
+  </button>
+  <button onclick="exportWord()" class="fab flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-2xl font-semibold">
+    <i class="fas fa-file-word"></i> Word
+  </button>
+  <button onclick="clearAll()" class="fab flex items-center gap-2 px-5 py-3 text-red-400 hover:bg-zinc-800 rounded-2xl text-sm font-medium">
+    <i class="fas fa-trash"></i> Clear
+  </button>
+</div>
+
+<!-- Template Modal -->
+<div id="templateModal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-[100]">
+  <div class="bg-zinc-900 rounded-3xl max-w-6xl w-full mx-4 max-h-[92vh] overflow-auto">
+    <div class="p-8 border-b border-zinc-800 flex items-center justify-between sticky top-0 bg-zinc-900 z-10">
+      <div>
+        <h2 class="text-2xl font-bold">Choose Sample CV</h2>
+        <div class="mt-2 flex items-center gap-3 text-xs text-zinc-300">
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input id="styleOnlyToggle" type="checkbox" class="accent-emerald-500">
+            Style Only (do not overwrite editor data)
+          </label>
+          <span class="text-zinc-500">• If off: loads exact sample text + autofills editor</span>
+        </div>
+      </div>
+      <button onclick="hideTemplates()" class="text-4xl leading-none hover:text-zinc-400">×</button>
+    </div>
+    <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-6" id="modalGallery"></div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toastArea" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[120] flex flex-col gap-2 w-[92%] max-w-lg"></div>
+
+<script type="text/javascript">
+//<![CDATA[
+  
+/* ===========================
+   STATE
+=========================== */
+const STORAGE_KEY = "cvData_v3_samples";
+let currentTemplateId = "builder";
+
+function emptyData() {
+  return {
+    photo: "",
+    name: "",
+    title: "",
+    phone: "",
+    email: "",
+    location: "",
+    linkedin: "",
+    website: "",
+    summary: "",
+    personal: { nationality:"", dob:"", maritalStatus:"", relocation:"", noticePeriod:"" },
+    highlights: [],
+    experiences: [],
+    educations: [],
+    certifications: [],
+    publications: [],
+    presentations: [],
+    grants: [],
+    memberships: [],
+    skills: [],
+    languages: [],
+    references: [],
+    referencesNote: ""
+  };
+}
+
+let cvData = emptyData();
+
+/* ===========================
+   SAMPLE CVs (exact content intent from your uploaded HTMLs)
+   - ATS includes thesis/publications/conferences/grants/memberships/extra experience/references
+   - Modern edge includes sidebar strengths + core skills
+   - Asian includes personal particulars + objective + skills grid
+   - Teacher includes courses taught + professional development + references
+   - Europass includes additional info rows (publications, peer-reviewed, conferences, memberships, references)
+   - US Academic includes education + teaching/research exp + publications + prof dev
+=========================== */
+const sampleById = {
+  ats: {
+    name: "Jawwad Hussain",
+    title: "English Educator and School Administrator",
+    phone: "+92 306 688 2510",
+    email: "Jawwadh47@gmail.com",
+    location: "Faisalabad 38850, Pakistan",
+    linkedin: "",
+    website: "",
+    summary: "English instructor with 8+ years of teaching experience and recent school leadership/administration experience in Punjab, Pakistan. Experience includes curriculum-aligned lesson design, assessment preparation, academic writing support, and institutional documentation.",
+    personal: { nationality:"Pakistani", dob:"", maritalStatus:"", relocation:"", noticePeriod:"" },
+    highlights: [],
+    educations: [
+      { degree:"M.A. in English", school:"Government College University, Faisalabad", dates:"2017 – 2019", gpa:"Cumulative GPA: 3.34 / 4.00" },
+      { degree:"B.Ed. (Secondary), 1.5 years", school:"Virtual University of Pakistan", dates:"2019 – 2021", gpa:"Cumulative GPA: 3.26 / 4.00" },
+      { degree:"B.A.", school:"University of the Punjab, Lahore", dates:"2013 – 2015", gpa:"Marks: 527 / 800" }
+    ],
+    certifications: [
+      { name:"Academic English: Writing Specialization", issuer:"University of California, Irvine (Coursera)", date:"Mar 2023" },
+      { name:"English Composition I", issuer:"Duke University (Coursera)", date:"Feb 2023" },
+      { name:"Build Your Professional ePortfolio in English", issuer:"Georgia Institute of Technology (Coursera)", date:"Feb 2023" },
+      { name:"The Strategy of Content Marketing", issuer:"University of California (Coursera)", date:"Mar 2023" },
+      { name:"WordPress", issuer:"Virtual University of Pakistan (DigiSkills)", date:"Mar 2020" },
+      { name:"Creative Writing", issuer:"Virtual University of Pakistan (DigiSkills)", date:"Mar 2021" },
+      { name:"English Speaking", issuer:"Virtual University of Pakistan (DigiSkills)", date:"Mar 2021" },
+      { name:"Microsoft Office", issuer:"Space College of Computer Science, Kamalia", date:"Sep 2015" }
+    ],
+    experiences: [
+      { role:"English Instructor", company:"Lyceum English & Technical Skills Center, Faisalabad", dates:"May 2025 – Present", desc:"Designed course materials aligned with learner needs and institutional standards.\nDelivered outcomes-based instruction combining language focus with communicative practice." },
+      { role:"Vice Principal", company:"Wisdom House School System, Faisalabad", dates:"Aug 2023 – Apr 2025", desc:"Prepared academic reports and official correspondence supporting school operations.\nWorked with teachers on lesson planning quality and curriculum alignment.\nSupported consistency in assessment design and classroom task design across grades." },
+      { role:"English Teacher (Subject Specialist)", company:"Wisdom House School System, Faisalabad", dates:"Aug 2020 – Apr 2023", desc:"Taught English to elementary and high school classes as a subject specialist.\nMaintained continuity of learning through online instruction during COVID-19 disruptions.\nPrepared lessons and handouts aligned with SNC-based PTB syllabus requirements." },
+      { role:"English Teacher", company:"Eagles School System, Faisalabad", dates:"Mar 2019 – Feb 2020", desc:"Developed lesson plans emphasizing structured writing, communication, and critical thinking.\nDesigned unit plans and test papers aligned to syllabus requirements.\nProvided individualized feedback and mentoring for student development." },
+      { role:"English Teacher", company:"Abdalian Higher Secondary School, Kamalia", dates:"Aug 2015 – May 2017", desc:"Delivered syllabus-aligned instruction using student-centred teaching strategies.\nSupported student language development through targeted practice and reinforcement.\nFacilitated extracurricular activities contributing to holistic student development." },
+      { role:"Content Writer", company:"Soft Heart Foundation, Faisalabad", dates:"Jul 2017 – Feb 2019", desc:"Produced institutional documents (emails, feedback, posters, letters) supporting public communication and awareness." }
+    ],
+    skills: [
+      "Communicative Language Teaching (CLT); task-based instruction",
+      "Grammar instruction (form–meaning–use) and error analysis",
+      "Pronunciation teaching; IPA-based phonetic support",
+      "Academic writing support; feedback on student writing",
+      "Lesson planning; curriculum-based pedagogy",
+      "Assessment preparation; item writing (tests/worksheets)"
+    ],
+    publications: [
+      { title:"When the Heart Grows Up", venue:"Amazon Kindle", year:"2025" },
+      { title:"Creative Intelligence for Students", venue:"Amazon Kindle", year:"2022" }
+    ],
+    presentations: [
+      { title:"Enhancing argument structure in secondary-level ESL writing", event:"International Conference on Language and Education, Lahore", date:"Mar 2024", note:"Paper presentation." },
+      { title:"Classroom-based feedback cycles and learner autonomy", event:"Punjab ELT Symposium, Faisalabad", date:"Sep 2023", note:"Presented talk." }
+    ],
+    grants: [
+      { name:"Teaching Innovation Micro-Grant", org:"Wisdom House School System", year:"2024", note:"Support to develop curriculum-aligned writing modules for Grades 9–10." },
+      { name:"Merit Fellowship (Tuition Support)", org:"Government College University, Faisalabad", year:"2018", note:"Merit-based tuition support during M.A. studies." }
+    ],
+    memberships: [
+      "Pakistan English Language Teachers’ Association (PELTA) — Member",
+      "TESOL International Association — Member",
+      "Applied Linguistics Association of Pakistan — Member"
+    ],
+    languages: ["English — Advanced", "Urdu — Native", "Punjabi — Native", "Arabic — Basic"],
+    references: [
+      { name:"Dr. Ghulam Murtaza Aatir", title:"Head of Department English, GCU, Faisalabad", phone:"+92 (41) 9201413", email:"engliterature@gcuf.edu.pk" }
+    ],
+    referencesNote: "Additional referees available on request."
+  },
+
+  modern: {
+    name: "Jawwad Hussain",
+    title: "Education Professional | Administrative Leader | Open to Diverse Roles",
+    phone: "+92 306 688 2510",
+    email: "Jawwadh47@gmail.com",
+    location: "Faisalabad, Pakistan",
+    summary: "Detail-oriented and adaptable professional with extensive experience in education, academic leadership, and institutional coordination. Demonstrates strong communication, leadership, and organizational capabilities. Proven ability to manage teams, design structured programs, and support performance-driven outcomes. Seeking opportunities across administrative, educational, or organizational roles.",
+    skills: [
+      "Communication & Presentation",
+      "Leadership & Supervision",
+      "Curriculum Planning",
+      "Problem Solving",
+      "Microsoft Office Suite",
+      "Report Writing",
+      "Team Collaboration",
+      "Time Management"
+    ],
+    highlights: [],
+    experiences: [
+      { role:"Vice Principal", company:"Wisdom House School System", dates:"2023–2025", desc:"Supervised academic operations and staff coordination.\nPrepared institutional reports and strategic planning documents.\nImplemented curriculum alignment and evaluation frameworks." },
+      { role:"English Instructor", company:"Various Institutions", dates:"2020–Present", desc:"Delivered structured instruction across multiple grade levels.\nDeveloped assessment tools and monitored learner progress.\nMaintained effective classroom and performance management systems." }
+    ],
+    educations: [
+      { degree:"M.A. in English", school:"Government College University, Faisalabad", dates:"2017–2019", gpa:"" },
+      { degree:"B.Ed. (Secondary)", school:"Virtual University of Pakistan", dates:"2019–2021", gpa:"" }
+    ],
+    languages: ["English (Advanced)", "Urdu (Native)", "Punjabi (Native)", "Arabic (Basic)"],
+    memberships: [],
+    publications: [],
+    presentations: [],
+    grants: [],
+    certifications: [],
+    references: [],
+    referencesNote: ""
+  },
+
+  african: {
+    name: "Jawwad Hussain",
+    title: "Education & Administration Professional",
+    phone: "+92 306 688 2510",
+    email: "Jawwadh47@gmail.com",
+    location: "Faisalabad, Pakistan",
+    linkedin: "linkedin.com/in/yourprofile",
+    summary: "Experienced education professional with teaching and academic administration experience. Demonstrated ability to lead teams, coordinate programs, and support institutional development. Skilled in structured curriculum planning, performance monitoring, assessment preparation, and stakeholder engagement.",
+    personal: { nationality:"Pakistani", dob:"DD/MM/YYYY", maritalStatus:"", relocation:"Yes/No", noticePeriod:"Immediate / X weeks" },
+    highlights: [
+      "Add 1–2 measurable achievements (e.g., improved results, managed staff, launched program)…",
+      "Add 1–2 leadership/operations achievements…",
+      "Add 1–2 teaching/training achievements…"
+    ],
+    skills: [
+      "Curriculum Development",
+      "Educational Leadership",
+      "Administrative Coordination",
+      "Report Writing",
+      "Strategic Planning",
+      "Monitoring & Evaluation",
+      "Communication Skills"
+    ],
+    experiences: [
+      { role:"Vice Principal", company:"Wisdom House School System — Faisalabad, Pakistan", dates:"2023–2025", desc:"Supervised academic operations and coordinated staff performance.\nPrepared institutional reports and strategic planning documents.\nMonitored curriculum implementation and assessment standards." },
+      { role:"English Instructor", company:"Lyceum English & Technical Skills Center — Faisalabad, Pakistan", dates:"2025–Present", desc:"Designed curriculum-aligned lesson plans and teaching materials.\nImplemented formative assessment and feedback to improve learner outcomes." }
+    ],
+    educations: [
+      { degree:"M.A. in English", school:"Government College University, Faisalabad", dates:"2017–2019", gpa:"GPA: 3.34/4.00" },
+      { degree:"B.Ed. (Secondary Education)", school:"Virtual University of Pakistan", dates:"2019–2021", gpa:"GPA: 3.26/4.00" }
+    ],
+    languages: ["English (Advanced)", "Urdu (Native)", "Punjabi (Native)", "Arabic (Basic)"],
+    certifications: [
+      { name:"Academic English: Writing Specialization", issuer:"UCI", date:"" },
+      { name:"English Composition I", issuer:"Duke", date:"" }
+    ],
+    memberships: [],
+    publications: [],
+    presentations: [],
+    grants: [],
+    references: [],
+    referencesNote: ""
+  },
+
+  asian: {
+    name: "Jawwad Hussain",
+    title: "Education & Administration Professional",
+    phone: "+92 306 688 2510",
+    email: "Jawwadh47@gmail.com",
+    location: "Faisalabad, Pakistan",
+    summary: "Motivated and adaptable professional with strong communication, leadership, and coordination skills. Seeking a position where I can contribute to organizational performance through structured planning, documentation, team collaboration, and continuous improvement.",
+    personal: { nationality:"Pakistani", dob:"DD/MM/YYYY", maritalStatus:"Single/Married", relocation:"Yes/No (countries/cities)", noticePeriod:"" },
+    highlights: [],
+    experiences: [
+      { role:"English Instructor", company:"Lyceum English & Technical Skills Center, Faisalabad", dates:"May 2025 – Present", desc:"Designed course materials aligned with learner needs and institutional standards.\nDelivered outcomes-based instruction integrating explicit language focus with communicative practice." },
+      { role:"Vice Principal", company:"Wisdom House School System, Faisalabad", dates:"Aug 2023 – Apr 2025", desc:"Prepared academic reports and official correspondence supporting school operations.\nCoordinated with teachers on lesson planning and alignment to curriculum outcomes.\nSupported consistency in assessment design and classroom task design across grades." }
+    ],
+    educations: [
+      { degree:"M.A. English", school:"Government College University, Faisalabad", dates:"2017 – 2019", gpa:"GPA: 3.34/4.00" },
+      { degree:"B.Ed. (Secondary), 1.5 years", school:"Virtual University of Pakistan", dates:"2019 – 2021", gpa:"GPA: 3.26/4.00" },
+      { degree:"B.A.", school:"University of the Punjab, Lahore", dates:"2013 – 2015", gpa:"" }
+    ],
+    skills: [
+      "Administration: Reporting, coordination, documentation, scheduling, compliance support",
+      "Education: Lesson planning, assessment preparation, classroom management, mentoring",
+      "Communication: Professional correspondence, presentations, stakeholder handling",
+      "ICT: Microsoft Office, Google Workspace, online teaching tools"
+    ],
+    languages: ["English (Advanced)", "Urdu (Native)", "Punjabi (Native)", "Arabic (Basic)"],
+    certifications: [],
+    publications: [],
+    presentations: [],
+    grants: [],
+    memberships: [],
+    references: [],
+    referencesNote: ""
+  },
+
+  teacher: {
+    name: "Jawwad Hussain",
+    title: "M.A., B.Ed.",
+    phone: "+92 306 688 2510",
+    email: "Jawwadh47@gmail.com",
+    location: "Faisalabad, Pakistan",
+    summary: "Dedicated and student-focused English educator with over seven years of teaching and academic leadership experience. Skilled in curriculum design, classroom management, formative assessment, and communicative language teaching. Committed to fostering critical thinking, structured writing skills, and learner engagement across diverse academic levels.",
+    experiences: [
+      { role:"English Instructor", company:"Lyceum English & Technical Skills Center, Faisalabad", dates:"2025–Present", desc:"Design and deliver structured English language courses for secondary and adult learners.\nDevelop instructional materials aligned with curriculum standards and learner outcomes.\nImplement formative assessment strategies to monitor academic progress." },
+      { role:"Vice Principal", company:"Wisdom House School System, Faisalabad", dates:"2023–2025", desc:"Supervised academic planning and institutional operations.\nMentored and evaluated teaching staff.\nLed curriculum review and academic policy implementation." },
+      { role:"English Teacher (Subject Specialist)", company:"Wisdom House School System, Faisalabad", dates:"2020–2023", desc:"Taught English language and literature at elementary and secondary levels.\nPrepared lesson plans aligned with national curriculum standards.\nMaintained instructional continuity through online learning platforms during COVID-19." },
+      { role:"English Teacher", company:"Various Institutions, Punjab", dates:"2015–2020", desc:"Delivered structured instruction in grammar, writing, and literature.\nDesigned assessments and evaluated student performance.\nEncouraged student participation through interactive teaching methods." }
+    ],
+    educations: [
+      { degree:"M.A. in English", school:"Government College University, Faisalabad", dates:"2017–2019", gpa:"" },
+      { degree:"B.Ed. (Secondary Education)", school:"Virtual University of Pakistan", dates:"2019–2021", gpa:"" },
+      { degree:"B.A.", school:"University of the Punjab, Lahore", dates:"2013–2015", gpa:"" }
+    ],
+    certifications: [
+      { name:"Academic English: Writing Specialization", issuer:"University of California, Irvine", date:"" },
+      { name:"English Composition I", issuer:"Duke University", date:"" },
+      { name:"Creative Writing", issuer:"DigiSkills Pakistan", date:"" },
+      { name:"Microsoft Office Certification", issuer:"", date:"" }
+    ],
+    skills: [
+      "Curriculum Development",
+      "Lesson Planning",
+      "Classroom Management",
+      "Student Assessment",
+      "Communicative Language Teaching",
+      "Academic Writing Instruction",
+      "Educational Leadership"
+    ],
+    languages: ["English (Advanced)", "Urdu (Native)", "Punjabi (Native)", "Arabic (Basic)"],
+    referencesNote: "Available upon request."
+  },
+
+  europass: {
+    name: "Jawwad Hussain",
+    title: "English Educator / School Administrator",
+    phone: "+92 306 688 2510",
+    email: "Jawwadh47@gmail.com",
+    location: "Faisalabad 38850, Pakistan",
+    summary: "English instructor with teaching experience and school leadership/administration experience in Punjab, Pakistan. Focus areas include curriculum alignment, assessment preparation, academic writing support, and institutional documentation.",
+    experiences: [
+      { role:"English Instructor", company:"Lyceum English & Technical Skills Center, Faisalabad", dates:"May 2025 – Present", desc:"Designed course materials aligned with learner needs and institutional standards.\nDelivered outcomes-based instruction, combining explicit language focus with communicative practice." },
+      { role:"Vice Principal", company:"Wisdom House School System, Faisalabad", dates:"Aug 2023 – Apr 2025", desc:"Prepared academic reports and official correspondence supporting school operations.\nWorked with teachers on lesson planning, implementation quality, and alignment to curriculum outcomes.\nSupported consistency in assessment design and classroom task design across grades." }
+    ],
+    educations: [
+      { degree:"M.A. in English", school:"Government College University, Faisalabad", dates:"2017 – 2019", gpa:"Cumulative GPA: 3.34 / 4.00" },
+      { degree:"B.Ed. (Secondary), 1.5 years", school:"Virtual University of Pakistan", dates:"2019 – 2021", gpa:"Cumulative GPA: 3.26 / 4.00" },
+      { degree:"B.A.", school:"University of the Punjab, Lahore", dates:"2013 – 2015", gpa:"Marks: 527/800" }
+    ],
+    skills: [
+      "Communicative Language Teaching (CLT); task-based instruction",
+      "Grammar instruction (form–meaning–use) and error analysis",
+      "Pronunciation teaching; IPA-based phonetic support",
+      "Academic writing support; feedback on student writing skills",
+      "Lesson planning; curriculum based pedagogy",
+      "Assessment preparation; item writing (tests/worksheets)"
+    ],
+    publications: [
+      { title:"When the Heart Grows Up", venue:"Amazon Kindle", year:"2025" },
+      { title:"Creative Intelligence for Students", venue:"Amazon Kindle", year:"2022" }
+    ],
+    presentations: [
+      { title:"Enhancing argument structure in secondary-level ESL writing", event:"International Conference on Language and Education, Lahore", date:"Mar 2024", note:"Paper presentation" },
+      { title:"Classroom-based feedback cycles and learner autonomy", event:"Punjab ELT Symposium, Faisalabad", date:"Sep 2023", note:"Presented talk" }
+    ],
+    memberships: [
+      "Pakistan English Language Teachers’ Association (PELTA) — Member",
+      "TESOL International Association — Member",
+      "Applied Linguistics Association of Pakistan — Member"
+    ],
+    references: [
+      { name:"Dr. Ghulam Murtaza Aatir", title:"Head of Department English, GCU, Faisalabad", phone:"+92 (41) 9201413", email:"engliterature@gcuf.edu.pk" }
+    ],
+    referencesNote: "Additional referees available on request."
+  },
+
+  usacademic: {
+    name: "Jawwad Hussain",
+    title: "",
+    phone: "+92 306 688 2510",
+    email: "Jawwadh47@gmail.com",
+    location: "Faisalabad 38850, Pakistan",
+    summary: "",
+    educations: [
+      { degree:"Master of Arts, English", school:"Government College University, Faisalabad", dates:"2017 – 2019", gpa:"GPA: 3.34/4.00" },
+      { degree:"Bachelor of Education (Secondary), 1.5 years", school:"Virtual University of Pakistan", dates:"2019 – 2021", gpa:"GPA: 3.26/4.00" },
+      { degree:"Bachelor of Arts", school:"University of the Punjab, Lahore", dates:"2013 – 2015", gpa:"Marks: 527/800" }
+    ],
+    experiences: [
+      { role:"English Instructor", company:"Lyceum English & Technical Skills Center, Faisalabad, Punjab", dates:"May 2025 – Present", desc:"Designed course materials aligned with learner needs and institutional standards.\nDelivered outcomes-based instruction integrating explicit language focus with communicative practice." },
+      { role:"Vice Principal", company:"Wisdom House School System, Faisalabad, Punjab", dates:"Aug 2023 – Apr 2025", desc:"Prepared academic reports and official correspondence supporting school operations.\nCoordinated with teachers on lesson planning and alignment to curriculum outcomes.\nSupported consistency in assessment design and classroom task design across grades." }
+    ],
+    publications: [
+      { title:"When the Heart Grows Up", venue:"Amazon Kindle", year:"2025" },
+      { title:"Creative Intelligence for Students", venue:"Amazon Kindle", year:"2022" }
+    ],
+    certifications: [
+      { name:"Academic English: Writing Specialization", issuer:"University of California, Irvine (Coursera)", date:"Mar 2023" },
+      { name:"English Composition I", issuer:"Duke University (Coursera)", date:"Feb 2023" }
+    ],
+    skills: [],
+    languages: [],
+    references: [],
+    referencesNote: ""
+  }
+};
+
+const templates = [
+  {id:"builder", name:"Builder Preview", badge:"Live"},
+  {id:"ats", name:"ATS Formatted"},
+  {id:"modern", name:"Modern Edge"},
+  {id:"african", name:"African Professional"},
+  {id:"asian", name:"Asian Classic"},
+  {id:"teacher", name:"Teacher Classic"},
+  {id:"europass", name:"Europass"},
+  {id:"usacademic", name:"US Academic"}
+];
+
+/* ===========================
+   UTILITIES
+=========================== */
+function toast(message, type="success") {
+  const area = document.getElementById("toastArea");
+  const id = "t" + Math.random().toString(16).slice(2);
+  const color =
+    type === "error" ? "border-red-500/40 bg-red-950/40 text-red-100" :
+    type === "warn"  ? "border-amber-500/40 bg-amber-950/40 text-amber-100" :
+                       "border-emerald-500/40 bg-emerald-950/40 text-emerald-100";
+  const icon =
+    type === "error" ? "fa-circle-xmark" :
+    type === "warn"  ? "fa-triangle-exclamation" :
+                       "fa-circle-check";
+
+  const el = document.createElement("div");
+  el.id = id;
+  el.className = `toast ${color} border px-4 py-3 rounded-2xl shadow-xl flex items-start gap-3`;
+  el.innerHTML = `<i class="fa-solid ${icon} mt-0.5"></i><div class="text-sm leading-relaxed">${escapeHTML(message)}</div>`;
+  area.appendChild(el);
+  setTimeout(() => { if (document.getElementById(id)) el.remove(); }, 2200);
+}
+
+function escapeHTML(str) {
+  return String(str ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function safeUrl(raw) {
+  const s = String(raw || "").trim();
+  if (!s) return "";
+  if (/^https?:\/\//i.test(s)) return s;
+  return "https://" + s;
+}
+
+function fileBaseName() {
+  const n = (cvData.name || "CV").trim().replace(/\s+/g, "_");
+  return n || "CV";
+}
+
+function normalizeData(d) {
+  const base = emptyData();
+  const merged = {...base, ...(d||{})};
+  merged.personal = {...base.personal, ...((d||{}).personal||{})};
+  const arrFields = ["highlights","experiences","educations","certifications","publications","presentations","grants","memberships","skills","languages","references"];
+  arrFields.forEach(k => merged[k] = Array.isArray(merged[k]) ? merged[k] : []);
+  merged.referencesNote = merged.referencesNote || "";
+  return merged;
+}
+
+function saveToLocal() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({cvData, currentTemplateId}));
+}
+
+function loadFromLocal() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (!saved) return;
+  try {
+    const parsed = JSON.parse(saved);
+    if (parsed && parsed.cvData) cvData = normalizeData(parsed.cvData);
+    if (parsed && parsed.currentTemplateId) currentTemplateId = parsed.currentTemplateId;
+  } catch {}
+}
+
+function calculateCompletion() {
+  let score = 20;
+  if (cvData.photo) score += 10;
+  if ((cvData.name||"").trim()) score += 10;
+  if ((cvData.title||"").trim()) score += 5;
+  if ((cvData.phone||"").trim()) score += 5;
+  if ((cvData.email||"").trim()) score += 5;
+  if ((cvData.summary||"").trim()) score += 10;
+  if (cvData.experiences.length) score += 15;
+  if (cvData.educations.length) score += 10;
+  if (cvData.skills.length) score += 5;
+  if (cvData.languages.length) score += 5;
+  if (cvData.certifications.length) score += 5;
+  if (cvData.publications.length) score += 5;
+
+  document.getElementById("completion").textContent = `${Math.min(100, score)}% Complete`;
+}
+
+function sectionList(items, renderer) {
+  if (!items || !items.length) return "";
+  return items.map(renderer).join("");
+}
+
+function templateBase(title, css, bodyHTML) {
+  return `<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>${escapeHTML(title)}</title>
+<style>${css}</style>
+</head><body>${bodyHTML}</body></html>`;
+}
+
+/* ===========================
+   TEMPLATES (match your uploaded HTML styles)
+=========================== */
+function tplATS(d) {
+  const css = `
+:root{--text:#111;--muted:#444;--rule:#d8d8d8;}
+html,body{margin:0;padding:0;background:#fff;color:var(--text);font-family:Arial,Calibri,Helvetica,sans-serif;font-size:11.2pt;line-height:1.35}
+.page{max-width:210mm;margin:0 auto;padding:18mm;box-sizing:border-box}
+@page{size:A4;margin:18mm}
+header{margin:0 0 12pt 0;padding:0 0 8pt 0;border-bottom:1px solid var(--rule)}
+.name{margin:0;font-size:20pt;line-height:1.1;font-weight:700;letter-spacing:.2px}
+.title{margin:3pt 0 6pt 0;font-size:12pt;font-weight:500;color:var(--muted)}
+.contact{margin:0;font-size:10.5pt;color:var(--text)}
+section{margin-top:12pt}
+h2{margin:0 0 6pt 0;padding-top:10pt;border-top:1px solid var(--rule);font-size:11.8pt;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+section:first-of-type h2{border-top:none;padding-top:0}
+.item{margin:0 0 10pt 0;break-inside:avoid;page-break-inside:avoid}
+.item-head{margin:0 0 2pt 0}
+.role{font-weight:700}
+.place,.dates,.meta{color:var(--muted)}
+.meta{margin:0 0 3pt 0;font-size:10.5pt}
+ul{margin:4pt 0 0 18pt;padding:0}
+li{margin:2pt 0}
+a{color:inherit;text-decoration:none}
+`;
+  const contactBits = [
+    d.location && escapeHTML(d.location),
+    d.phone && escapeHTML(d.phone),
+    d.email ? `<a href="mailto:${escapeHTML(d.email)}">${escapeHTML(d.email)}</a>` : ""
+  ].filter(Boolean).join(" | ");
+
+  const expHTML = sectionList(d.experiences, (e) => {
+    const bullets = String(e.desc||"").split("\n").map(x=>x.trim()).filter(Boolean);
+    return `
+      <div class="item">
+        <p class="item-head">
+          <span class="role">${escapeHTML(e.role||"")}</span>, <span class="place">${escapeHTML(e.company||"")}</span>
+          <span class="dates">(${escapeHTML(e.dates||"")})</span>
+        </p>
+        ${bullets.length ? `<ul>${bullets.map(b=>`<li>${escapeHTML(b)}</li>`).join("")}</ul>` : ""}
+      </div>
+    `;
+  });
+
+  const eduHTML = sectionList(d.educations, (e) => `
+    <div class="item">
+      <p class="item-head">
+        <span class="role">${escapeHTML(e.degree||"")}</span>, <span class="place">${escapeHTML(e.school||"")}</span>
+        <span class="dates">(${escapeHTML(e.dates||"")})</span>
+      </p>
+      ${e.gpa ? `<p class="meta">${escapeHTML(e.gpa)}</p>` : ""}
+    </div>
+  `);
+
+  const certHTML = sectionList(d.certifications, (c) => `
+    <div class="item">
+      <p class="item-head">
+        <span class="role">${escapeHTML(c.name||"")}</span>${c.issuer?`, <span class="place">${escapeHTML(c.issuer)}</span>`:""} ${c.date?`<span class="dates">(${escapeHTML(c.date)})</span>`:""}
+      </p>
+    </div>
+  `);
+
+  const pubsHTML = sectionList(d.publications, (p) => `
+    <div class="item">
+      <p class="item-head"><span class="role">${escapeHTML(p.title||"")}</span> ${p.year?`<span class="dates">(${escapeHTML(p.year)})</span>`:""}</p>
+      ${p.venue ? `<p class="meta">${escapeHTML(p.venue)}.</p>` : ""}
+    </div>
+  `);
+
+  const presHTML = sectionList(d.presentations, (p) => `
+    <div class="item">
+      <p class="item-head"><span class="role">${escapeHTML(p.title||"")}</span>${p.event?`, <span class="place">${escapeHTML(p.event)}</span>`:""} ${p.date?`<span class="dates">(${escapeHTML(p.date)})</span>`:""}</p>
+      ${p.note ? `<p class="meta">${escapeHTML(p.note)}</p>` : ""}
+    </div>
+  `);
+
+  const grantsHTML = sectionList(d.grants, (g) => `
+    <div class="item">
+      <p class="item-head"><span class="role">${escapeHTML(g.name||"")}</span>${g.org?`, <span class="place">${escapeHTML(g.org)}</span>`:""} ${g.year?`<span class="dates">(${escapeHTML(g.year)})</span>`:""}</p>
+      ${g.note ? `<p class="meta">${escapeHTML(g.note)}</p>` : ""}
+    </div>
+  `);
+
+  const refsHTML = sectionList(d.references, (r) => `
+    <div class="item">
+      <p class="item-head"><span class="role">${escapeHTML(r.name||"")}</span>${r.title?`, <span class="place">${escapeHTML(r.title)}</span>`:""}</p>
+      ${r.phone ? `<p class="meta">Phone: ${escapeHTML(r.phone)}</p>` : ""}
+      ${r.email ? `<p class="meta">Email: ${escapeHTML(r.email)}</p>` : ""}
+    </div>
+  `);
+
+  const body = `
+  <div class="page">
+    <header>
+      <h1 class="name">${escapeHTML(d.name || "Your Name")}</h1>
+      <p class="title">${escapeHTML(d.title || "Your Title")}</p>
+      <p class="contact">${contactBits || "Add contact details in the editor"}</p>
+    </header>
+
+    ${d.summary?.trim() ? `<section><h2>Professional Summary</h2><p>${escapeHTML(d.summary).replaceAll("\n","<br>")}</p></section>` : ""}
+
+    ${d.educations?.length ? `<section><h2>Education</h2>${eduHTML}</section>` : ""}
+
+    ${d.certifications?.length ? `<section><h2>Certifications</h2>${certHTML}</section>` : ""}
+
+    ${d.experiences?.length ? `<section><h2>Professional Experience</h2>${expHTML}</section>` : ""}
+
+    ${d.skills?.length ? `<section><h2>Skills</h2><ul>${d.skills.map(s=>`<li>${escapeHTML(s)}</li>`).join("")}</ul></section>` : ""}
+
+    ${d.publications?.length ? `<section><h2>Publications</h2>${pubsHTML}</section>` : ""}
+
+    ${d.presentations?.length ? `<section><h2>Conference Presentations</h2>${presHTML}</section>` : ""}
+
+    ${d.grants?.length ? `<section><h2>Grants and Fellowships</h2>${grantsHTML}</section>` : ""}
+
+    ${d.memberships?.length ? `<section><h2>Professional Memberships</h2><ul>${d.memberships.map(m=>`<li>${escapeHTML(m)}</li>`).join("")}</ul></section>` : ""}
+
+    ${d.languages?.length ? `<section><h2>Languages</h2><ul>${d.languages.map(l=>`<li>${escapeHTML(l)}</li>`).join("")}</ul></section>` : ""}
+
+    ${(d.references?.length || d.referencesNote?.trim()) ? `<section><h2>References</h2>${refsHTML}${d.referencesNote?`<p class="meta">${escapeHTML(d.referencesNote)}</p>`:""}</section>` : ""}
+
+  </div>`;
+  return templateBase(`${d.name||"CV"} — ATS`, css, body);
+}
+
+function tplModernEdge(d) {
+  const css = `
+html, body{margin:0;padding:0;background:#e9ecef;font-family:"Segoe UI",Arial,sans-serif;color:#111}
+@page{size:A4;margin:20mm}
+.page{width:210mm;min-height:297mm;margin:10mm auto;background:#fff;display:grid;grid-template-columns:32% 68%;box-sizing:border-box}
+.sidebar{background:#111827;color:#fff;padding:30px 20px}
+.sidebar h2{font-size:13px;letter-spacing:1px;text-transform:uppercase;margin:25px 0 10px;border-bottom:1px solid #444;padding-bottom:5px}
+.sidebar p, .sidebar li{font-size:13px;line-height:1.5;color:#e5e7eb}
+.sidebar ul{padding-left:16px;margin-top:5px}
+.main{padding:35px 30px}
+.name{font-size:28px;font-weight:700;margin-bottom:4px}
+.title{font-size:14px;color:#555;margin-bottom:20px}
+.section{margin-bottom:25px}
+.section h2{font-size:14px;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #111;padding-bottom:5px;margin-bottom:12px}
+.item{margin-bottom:15px}
+.item-header{display:flex;justify-content:space-between;font-weight:600;font-size:14px}
+.sub{font-size:13px;color:#555;margin-bottom:6px}
+ul{margin:6px 0 0 18px;font-size:13px}
+@media print{body{background:#fff}.page{margin:0}}
+`;
+  const body = `
+<div class="page">
+  <div class="sidebar">
+    <h2>Contact</h2>
+    ${d.location?`<p>${escapeHTML(d.location)}</p>`:""}
+    ${d.phone?`<p>${escapeHTML(d.phone)}</p>`:""}
+    ${d.email?`<p>${escapeHTML(d.email)}</p>`:""}
+
+    ${d.skills?.length ? `<h2>Core Skills</h2><ul>${d.skills.map(s=>`<li>${escapeHTML(s)}</li>`).join("")}</ul>`:""}
+
+    ${d.highlights?.length ? `<h2>Professional Strengths</h2><ul>${d.highlights.map(h=>`<li>${escapeHTML(h)}</li>`).join("")}</ul>`:""}
+
+    ${d.languages?.length ? `<h2>Languages</h2>${d.languages.map(l=>`<p>${escapeHTML(l)}</p>`).join("")}`:""}
+  </div>
+
+  <div class="main">
+    <div class="name">${escapeHTML(d.name||"Your Name")}</div>
+    <div class="title">${escapeHTML(d.title||"Your Title")}</div>
+
+    ${d.summary?.trim()?`
+      <div class="section">
+        <h2>Professional Profile</h2>
+        ${escapeHTML(d.summary).replaceAll("\n","<br>")}
+      </div>`:""}
+
+    ${d.experiences?.length?`
+      <div class="section">
+        <h2>Professional Experience</h2>
+        ${sectionList(d.experiences, (e)=>{
+          const bullets = String(e.desc||"").split("\n").map(x=>x.trim()).filter(Boolean);
+          return `
+            <div class="item">
+              <div class="item-header"><span>${escapeHTML(e.role||"")}</span><span>${escapeHTML(e.dates||"")}</span></div>
+              <div class="sub">${escapeHTML(e.company||"")}</div>
+              ${bullets.length?`<ul>${bullets.map(b=>`<li>${escapeHTML(b)}</li>`).join("")}</ul>`:""}
+            </div>
+          `;
+        })}
+      </div>`:""}
+
+    ${d.educations?.length?`
+      <div class="section">
+        <h2>Education</h2>
+        ${sectionList(d.educations, (e)=>`
+          <div class="item">
+            <div class="item-header"><span>${escapeHTML(e.degree||"")}</span><span>${escapeHTML(e.dates||"")}</span></div>
+            <div class="sub">${escapeHTML(e.school||"")}${e.gpa?` • ${escapeHTML(e.gpa)}`:""}</div>
+          </div>
+        `)}
+      </div>`:""}
+  </div>
+</div>`;
+  return templateBase(`${d.name||"CV"} — Modern`, css, body);
+}
+
+function tplAfrican(d) {
+  const css = `
+html, body{margin:0;padding:0;background:#f2f2f2;font-family:Arial,Helvetica,sans-serif;color:#222}
+@page{size:A4;margin:20mm}
+.page{width:210mm;min-height:297mm;margin:10mm auto;background:#fff;display:grid;grid-template-columns:35% 65%;box-sizing:border-box}
+.sidebar{background:#0b3d2e;color:#fff;padding:30px 20px}
+.name{font-size:22px;font-weight:700;margin-bottom:5px}
+.title{font-size:13px;margin-bottom:14px;opacity:.9}
+.sidebar h2{font-size:13px;text-transform:uppercase;margin:18px 0 8px;border-bottom:1px solid rgba(255,255,255,.4);padding-bottom:4px}
+.sidebar p,.sidebar li{font-size:12.5px;line-height:1.6;color:#eef3f0}
+.sidebar ul{padding-left:16px;margin:5px 0 0 0}
+.main{padding:30px 30px}
+.section{margin-bottom:22px}
+.section h2{font-size:14px;text-transform:uppercase;border-bottom:2px solid #0b3d2e;padding-bottom:5px;margin-bottom:12px}
+.item{margin-bottom:14px}
+.item-header{display:flex;justify-content:space-between;font-weight:bold;font-size:13.5px}
+.sub,.meta{font-size:12.5px;color:#555}
+ul{margin:5px 0 0 18px;font-size:12.5px}
+@media print{body{background:#fff}.page{margin:0}}
+`;
+  const body = `
+<div class="page">
+  <div class="sidebar">
+    <div class="name">${escapeHTML(d.name||"Your Name")}</div>
+    <div class="title">${escapeHTML(d.title||"Your Title")}</div>
+
+    <h2>Personal Details</h2>
+    ${d.personal?.nationality?`<p>Nationality: ${escapeHTML(d.personal.nationality)}</p>`:""}
+    ${d.personal?.dob?`<p>Date of Birth: ${escapeHTML(d.personal.dob)}</p>`:""}
+    ${d.location?`<p>Location: ${escapeHTML(d.location)}</p>`:""}
+    ${d.phone?`<p>Phone: ${escapeHTML(d.phone)}</p>`:""}
+    ${d.email?`<p>Email: ${escapeHTML(d.email)}</p>`:""}
+    ${d.linkedin?`<p>LinkedIn: ${escapeHTML(d.linkedin)}</p>`:""}
+
+    ${d.skills?.length?`<h2>Core Competencies</h2><ul>${d.skills.map(s=>`<li>${escapeHTML(s)}</li>`).join("")}</ul>`:""}
+
+    ${d.languages?.length?`<h2>Languages</h2>${d.languages.map(l=>`<p>${escapeHTML(l)}</p>`).join("")}`:""}
+
+    ${d.personal?.noticePeriod || d.personal?.relocation ? `
+      <h2>Availability</h2>
+      ${d.personal.noticePeriod?`<p>Notice Period: ${escapeHTML(d.personal.noticePeriod)}</p>`:""}
+      ${d.personal.relocation?`<p>Willing to Relocate: ${escapeHTML(d.personal.relocation)}</p>`:""}
+    `:""}
+
+    ${d.certifications?.length?`<h2>Certifications</h2><ul>${d.certifications.map(c=>`<li>${escapeHTML(c.name)}${c.issuer?` — ${escapeHTML(c.issuer)}`:""}</li>`).join("")}</ul>`:""}
+  </div>
+
+  <div class="main">
+    ${d.summary?.trim()?`
+      <div class="section">
+        <h2>Professional Profile</h2>
+        ${escapeHTML(d.summary).replaceAll("\n","<br>")}
+      </div>`:""}
+
+    ${d.highlights?.length?`
+      <div class="section">
+        <h2>Key Highlights</h2>
+        <ul>${d.highlights.map(h=>`<li>${escapeHTML(h)}</li>`).join("")}</ul>
+      </div>`:""}
+
+    ${d.experiences?.length?`
+      <div class="section">
+        <h2>Work Experience</h2>
+        ${sectionList(d.experiences, (e)=>{
+          const bullets = String(e.desc||"").split("\n").map(x=>x.trim()).filter(Boolean);
+          return `
+            <div class="item">
+              <div class="item-header"><span>${escapeHTML(e.role||"")}</span><span>${escapeHTML(e.dates||"")}</span></div>
+              <div class="sub">${escapeHTML(e.company||"")}</div>
+              ${bullets.length?`<ul>${bullets.map(b=>`<li>${escapeHTML(b)}</li>`).join("")}</ul>`:""}
+            </div>
+          `;
+        })}
+      </div>`:""}
+
+    ${d.educations?.length?`
+      <div class="section">
+        <h2>Educational Qualifications</h2>
+        ${sectionList(d.educations, (e)=>`
+          <div class="item">
+            <div class="item-header"><span>${escapeHTML(e.degree||"")}</span><span>${escapeHTML(e.dates||"")}</span></div>
+            <div class="sub">${escapeHTML(e.school||"")}</div>
+            ${e.gpa?`<div class="meta">${escapeHTML(e.gpa)}</div>`:""}
+          </div>
+        `)}
+      </div>`:""}
+  </div>
+</div>`;
+  return templateBase(`${d.name||"CV"} — African`, css, body);
+}
+
+function tplAsian(d) {
+  const css = `
+html, body{margin:0;padding:0;background:#f2f2f2;font-family:Arial,Helvetica,sans-serif;color:#111;font-size:12px;line-height:1.5}
+@page{size:A4;margin:20mm}
+.page{width:210mm;min-height:297mm;margin:10mm auto;background:#fff;padding:18mm 18mm 16mm;box-sizing:border-box}
+.header{display:flex;justify-content:space-between;gap:18px;border-bottom:2px solid #111;padding-bottom:10px;margin-bottom:14px}
+.name{font-size:22px;font-weight:700;margin:0}
+.tagline{margin-top:4px;color:#444;font-size:12.5px}
+.contact{text-align:right;font-size:12px;color:#333;white-space:nowrap}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.6px;margin:16px 0 8px;border-bottom:1px solid #ccc;padding-bottom:4px}
+.grid{display:grid;grid-template-columns:180px 1fr;gap:6px 14px}
+.label{color:#333;font-weight:700}
+.item{margin-bottom:12px}
+.item-head{display:flex;justify-content:space-between;font-weight:700;font-size:12.5px}
+.sub{color:#444;margin-top:2px}
+ul{margin:6px 0 0 36px;padding:0}
+.muted{color:#555}
+@media print{body{background:#fff}.page{margin:0}}
+`;
+  const langsInline = (d.languages||[]).join("; ");
+  const body = `
+<div class="page">
+  <div class="header">
+    <div>
+      <h1 class="name">${escapeHTML(d.name||"Your Name")}</h1>
+      <div class="tagline">${escapeHTML(d.title||"Your Title")}</div>
+    </div>
+    <div class="contact">
+      ${d.location?`${escapeHTML(d.location)}<br>`:""}
+      ${d.phone?`${escapeHTML(d.phone)}<br>`:""}
+      ${d.email?`${escapeHTML(d.email)}<br>`:""}
+      ${d.linkedin?`<span class="muted">LinkedIn:</span> ${escapeHTML(d.linkedin)}<br>`:""}
+      ${d.website?`<span class="muted">Web:</span> ${escapeHTML(d.website)}`:""}
+    </div>
+  </div>
+
+  <h2>Personal Particulars</h2>
+  <div class="grid">
+    <div class="label">Nationality</div><div>${escapeHTML(d.personal?.nationality||"")}</div>
+    <div class="label">Date of Birth</div><div>${escapeHTML(d.personal?.dob||"")}</div>
+    <div class="label">Marital Status</div><div>${escapeHTML(d.personal?.maritalStatus||"")}</div>
+    <div class="label">Languages</div><div>${escapeHTML(langsInline||"")}</div>
+    <div class="label">Current Location</div><div>${escapeHTML(d.location||"")}</div>
+    <div class="label">Willing to Relocate</div><div>${escapeHTML(d.personal?.relocation||"")}</div>
+  </div>
+
+  ${d.summary?.trim()?`
+    <h2>Career Objective</h2>
+    <div class="muted">${escapeHTML(d.summary).replaceAll("\n","<br>")}</div>
+  `:""}
+
+  ${d.skills?.length?`
+    <h2>Core Skills</h2>
+    <div class="grid">
+      ${d.skills.map((s,i)=>`
+        <div class="label">Skill ${i+1}</div><div>${escapeHTML(s)}</div>
+      `).join("")}
+    </div>
+  `:""}
+
+  ${d.experiences?.length?`
+    <h2>Work Experience</h2>
+    ${sectionList(d.experiences,(e)=>{
+      const bullets = String(e.desc||"").split("\n").map(x=>x.trim()).filter(Boolean);
+      return `
+        <div class="item">
+          <div class="item-head">
+            <div>${escapeHTML(e.role||"")} — ${escapeHTML(e.company||"")}</div>
+            <div>${escapeHTML(e.dates||"")}</div>
+          </div>
+          ${bullets.length?`<ul>${bullets.map(b=>`<li>${escapeHTML(b)}</li>`).join("")}</ul>`:""}
+        </div>
+      `;
+    })}
+  `:""}
+
+  ${d.educations?.length?`
+    <h2>Education</h2>
+    ${sectionList(d.educations,(e)=>`
+      <div class="item">
+        <div class="item-head"><div>${escapeHTML(e.degree||"")} — ${escapeHTML(e.school||"")}</div><div>${escapeHTML(e.dates||"")}</div></div>
+        ${e.gpa?`<div class="sub">${escapeHTML(e.gpa)}</div>`:""}
+      </div>
+    `)}
+  `:""}
+</div>`;
+  return templateBase(`${d.name||"CV"} — Asian`, css, body);
+}
+
+function tplTeacher(d) {
+  const css = `
+html,body{margin:0;padding:0;background:#fff;color:#000;font-family:"Times New Roman",Times,serif;font-size:11pt;line-height:1.25}
+@page{size:A4;margin:25mm}
+.doc{max-width:170mm;margin:0 auto}
+.name{font-size:16pt;font-weight:bold;margin-bottom:4pt}
+.contact{margin-bottom:16pt}
+h2{font-size:11pt;font-weight:bold;text-transform:uppercase;margin:14pt 0 6pt 0}
+.entry{margin-bottom:10pt}
+.headerline{display:flex;justify-content:space-between;font-weight:bold}
+.sub{font-style:italic}
+ul{margin:6pt 0 0 18pt}
+`;
+  const body = `
+<div class="doc">
+  <div class="name">${escapeHTML(d.name||"Your Name")}${d.title?`, ${escapeHTML(d.title)}`:""}</div>
+  <div class="contact">
+    ${d.location?`${escapeHTML(d.location)}<br>`:""}
+    ${d.phone?`${escapeHTML(d.phone)}<br>`:""}
+    ${d.email?escapeHTML(d.email):""}
+  </div>
+
+  ${d.summary?.trim()?`<h2>PROFESSIONAL PROFILE</h2>${escapeHTML(d.summary).replaceAll("\n","<br>")}`:""}
+
+  ${d.experiences?.length?`
+    <h2>TEACHING EXPERIENCE</h2>
+    ${sectionList(d.experiences,(e)=>{
+      const bullets = String(e.desc||"").split("\n").map(x=>x.trim()).filter(Boolean);
+      return `
+        <div class="entry">
+          <div class="headerline"><span>${escapeHTML(e.role||"")}</span><span>${escapeHTML(e.dates||"")}</span></div>
+          <div class="sub">${escapeHTML(e.company||"")}</div>
+          ${bullets.length?`<ul>${bullets.map(b=>`<li>${escapeHTML(b)}</li>`).join("")}</ul>`:""}
+        </div>
+      `;
+    })}
+  `:""}
+
+  ${d.educations?.length?`
+    <h2>EDUCATION</h2>
+    ${sectionList(d.educations,(e)=>`
+      <div class="entry">
+        <div class="headerline"><span>${escapeHTML(e.degree||"")}</span><span>${escapeHTML(e.dates||"")}</span></div>
+        ${escapeHTML(e.school||"")}${e.gpa?` — ${escapeHTML(e.gpa)}`:""}
+      </div>
+    `)}
+  `:""}
+
+  ${d.certifications?.length?`
+    <h2>PROFESSIONAL DEVELOPMENT</h2>
+    ${d.certifications.map(c=>`${escapeHTML(c.name)}${c.issuer?` — ${escapeHTML(c.issuer)}`:""}${c.date?` (${escapeHTML(c.date)})`:""}<br>`).join("")}
+  `:""}
+
+  ${d.skills?.length?`<h2>TEACHING SKILLS</h2>${d.skills.map(s=>escapeHTML(s)).join(" • ")}`:""}
+
+  ${d.languages?.length?`<h2>LANGUAGES</h2>${d.languages.map(l=>escapeHTML(l)).join(" • ")}`:""}
+
+  <h2>REFERENCES</h2>
+  ${d.references?.length ? d.references.map(r=>`${escapeHTML(r.name)}${r.title?` — ${escapeHTML(r.title)}`:""}<br>`).join("") : ""}
+  ${d.referencesNote?.trim()?escapeHTML(d.referencesNote):"Available upon request."}
+</div>`;
+  return templateBase(`${d.name||"CV"} — Teacher`, css, body);
+}
+
+function tplEuropass(d) {
+  const css = `
+:root{--blue:#0b4ea2;--text:#111;--muted:#4a4a4a;--rule:#cfd7e3;--paper:#fff;--preview:#eef1f6;--base:11.2pt;--small:10.2pt;--h1:18pt;--doc:13.5pt;--sec:11.2pt;}
+html,body{margin:0;padding:0;background:var(--preview);color:var(--text);font-family:Calibri,"Segoe UI",Arial,Helvetica,sans-serif;font-size:var(--base);line-height:1.35}
+.page{width:210mm;min-height:297mm;margin:10mm auto;background:var(--paper);box-shadow:0 2mm 8mm rgba(0,0,0,.12);box-sizing:border-box;padding:14mm}
+@page{size:A4;margin:14mm}
+@media print{html,body{background:#fff}.page{width:auto;min-height:auto;margin:0;padding:0;box-shadow:none}a{color:inherit;text-decoration:none}}
+.topline{display:flex;align-items:flex-end;justify-content:space-between;gap:10mm;margin:0 0 9mm 0;padding-bottom:3mm;border-bottom:2px solid var(--rule)}
+.topline .doc{font-size:var(--doc);font-weight:700;color:var(--blue);letter-spacing:.2px;text-transform:lowercase}
+.topline .name{margin:0;font-size:var(--h1);line-height:1.08;font-weight:800;letter-spacing:.2px;text-align:right}
+.cv{width:100%;border-collapse:collapse;table-layout:fixed}
+.cv col.left{width:34%}.cv col.right{width:66%}
+.cv td{vertical-align:top;padding:5pt 6pt}
+.sec{color:var(--blue);font-weight:800;text-transform:uppercase;letter-spacing:.35px;font-size:var(--sec);padding-top:10pt!important;padding-bottom:6pt!important}
+.lbl{color:var(--blue);font-weight:700;font-size:var(--small);line-height:1.25}
+.val{color:var(--text);line-height:1.35}
+.rule td{padding:0;height:10pt;border-bottom:1px solid var(--rule)}
+.muted{color:var(--muted)}
+ul{margin:4pt 0 0 16pt;padding:0}
+li{margin:2.5pt 0}
+tr{break-inside:avoid;page-break-inside:avoid}
+`;
+  const pubs = d.publications?.length
+    ? d.publications.map(p=>`${escapeHTML(p.year||"")} — <em>${escapeHTML(p.title||"")}</em>${p.venue?`. ${escapeHTML(p.venue)}.`:""}`).join("<br/>")
+    : "";
+  const pres = d.presentations?.length
+    ? d.presentations.map(p=>`${escapeHTML(p.date||"")} — ${escapeHTML(p.title||"")}${p.event?`. ${escapeHTML(p.event)}`:""}${p.note?` (${escapeHTML(p.note)})`:""}`).join("<br/>")
+    : "";
+  const memb = d.memberships?.length ? d.memberships.map(m=>escapeHTML(m)).join("<br/>") : "";
+  const refs = d.references?.length
+    ? d.references.map(r=>`${escapeHTML(r.name||"")}${r.title?` — ${escapeHTML(r.title)}`:""}<br/>${r.phone?`Phone: ${escapeHTML(r.phone)}<br/>`:""}${r.email?`Email: ${escapeHTML(r.email)}`:""}`).join("<br/><br/>")
+    : "";
+
+  const body = `
+<div class="page">
+  <div class="topline">
+    <div class="doc">Europass <span>curriculum vitae</span></div>
+    <p class="name">${escapeHTML(d.name||"Your Name")}</p>
+  </div>
+
+  <table class="cv" aria-label="Europass CV">
+    <colgroup><col class="left"><col class="right"></colgroup>
+
+    <tr>
+      <td class="sec">PERSONAL INFORMATION</td>
+      <td class="val">
+        <strong>${escapeHTML(d.name||"")}</strong><br/>
+        ${d.location?`${escapeHTML(d.location)}<br/>`:""}
+        ${d.phone?`${escapeHTML(d.phone)}<br/>`:""}
+        ${d.email?escapeHTML(d.email):""}
+      </td>
+    </tr>
+    <tr><td class="lbl">Applied for</td><td class="val">${escapeHTML(d.title||"")}</td></tr>
+    <tr class="rule"><td colspan="2"></td></tr>
+
+    ${d.experiences?.length?`
+      <tr><td class="sec">WORK EXPERIENCE</td><td class="val"></td></tr>
+      ${sectionList(d.experiences, (e)=>{
+        const bullets = String(e.desc||"").split("\n").map(x=>x.trim()).filter(Boolean);
+        return `
+          <tr><td class="lbl">Duration</td><td class="val"><strong>${escapeHTML(e.dates||"")}</strong></td></tr>
+          <tr><td class="lbl">Occupation / position held</td><td class="val">${escapeHTML(e.role||"")}</td></tr>
+          <tr><td class="lbl">Main activities and responsibilities</td><td class="val">${bullets.length?`<ul>${bullets.map(b=>`<li>${escapeHTML(b)}</li>`).join("")}</ul>`:""}</td></tr>
+          <tr><td class="lbl">Name and address of employer</td><td class="val">${escapeHTML(e.company||"")}</td></tr>
+          <tr class="rule"><td colspan="2"></td></tr>
+        `;
+      })}
+    `:""}
+
+    ${d.educations?.length?`
+      <tr><td class="sec">EDUCATION AND TRAINING</td><td class="val"></td></tr>
+      ${sectionList(d.educations, (e)=>`
+        <tr><td class="lbl">Session</td><td class="val"><strong>${escapeHTML(e.dates||"")}</strong></td></tr>
+        <tr><td class="lbl">Title of qualification awarded</td><td class="val">${escapeHTML(e.degree||"")}</td></tr>
+        <tr><td class="lbl">Organisation</td><td class="val">${escapeHTML(e.school||"")}</td></tr>
+        ${e.gpa?`<tr><td class="lbl">Notes</td><td class="val muted">${escapeHTML(e.gpa)}</td></tr>`:""}
+        <tr class="rule"><td colspan="2"></td></tr>
+      `)}
+    `:""}
+
+    ${(d.skills?.length || d.languages?.length) ? `
+      <tr><td class="sec">PERSONAL SKILLS</td><td class="val"></td></tr>
+      ${d.skills?.length?`<tr><td class="lbl">Skills</td><td class="val"><ul>${d.skills.map(s=>`<li>${escapeHTML(s)}</li>`).join("")}</ul></td></tr>`:""}
+      ${d.languages?.length?`<tr><td class="lbl">Languages</td><td class="val"><ul>${d.languages.map(l=>`<li>${escapeHTML(l)}</li>`).join("")}</ul></td></tr>`:""}
+      <tr class="rule"><td colspan="2"></td></tr>
+    `:""}
+
+    ${(pubs || pres || memb || refs) ? `
+      <tr><td class="sec">ADDITIONAL INFORMATION</td><td class="val"></td></tr>
+      ${pubs?`<tr><td class="lbl">Publications</td><td class="val">${pubs}</td></tr>`:""}
+      ${pres?`<tr><td class="lbl">Conference presentations</td><td class="val">${pres}</td></tr>`:""}
+      ${memb?`<tr><td class="lbl">Memberships</td><td class="val">${memb}</td></tr>`:""}
+      ${refs?`<tr><td class="lbl">References</td><td class="val">${refs}${d.referencesNote?`<br/><span class="muted">${escapeHTML(d.referencesNote)}</span>`:""}</td></tr>`:""}
+    `:""}
+
+  </table>
+</div>`;
+  return templateBase(`${d.name||"CV"} — Europass`, css, body);
+}
+
+function tplUSAcademic(d) {
+  const css = `
+html,body{margin:0;padding:0;background:#fff;color:#000;font-family:"Times New Roman",Times,serif;font-size:11pt;line-height:1.22}
+@page{size:Letter;margin:1in}
+.doc{max-width:7.5in;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:16pt;margin-bottom:6pt}
+.name{font-weight:700;font-size:16pt;margin:0}
+.contact{text-align:right;color:#222;font-size:11pt;margin-top:2pt;white-space:nowrap}
+.contact div{margin:1pt 0}
+hr{border:0;border-top:1px solid #000;margin:6pt 0 10pt}
+h2{margin:12pt 0 6pt 0;font-size:11pt;font-weight:700;text-transform:uppercase}
+.entry{margin:0 0 8pt 0;break-inside:avoid;page-break-inside:avoid}
+.row{display:flex;justify-content:space-between;gap:12pt;align-items:baseline}
+.left{min-width:0}
+.right{white-space:nowrap;color:#222;font-variant-numeric:tabular-nums}
+.org{font-weight:700}
+.line{margin:1pt 0 0 0}
+.indent{margin-left:18pt}
+ul,li{list-style:none;margin:0;padding:0}
+`;
+  const body = `
+<div class="doc">
+  <header>
+    <h1 class="name">${escapeHTML(d.name||"Your Name")}</h1>
+  </header>
+  <hr/>
+  <div class="contact">
+    ${d.location?`<div>${escapeHTML(d.location)}</div>`:""}
+    ${d.phone?`<div>${escapeHTML(d.phone)}</div>`:""}
+    ${d.email?`<div><a href="mailto:${escapeHTML(d.email)}" style="color:inherit;text-decoration:none;">${escapeHTML(d.email)}</a></div>`:""}
+  </div>
+
+  ${d.educations?.length?`
+    <h2>Education</h2>
+    ${sectionList(d.educations, (e)=>`
+      <div class="entry">
+        <div class="row"><div class="left org">${escapeHTML(e.school||"")}</div><div class="right">${escapeHTML(e.dates||"")}</div></div>
+        <div class="line">${escapeHTML(e.degree||"")}${e.gpa?`; ${escapeHTML(e.gpa)}`:""}</div>
+      </div>
+    `)}
+  `:""}
+
+  ${d.experiences?.length?`
+    <h2>Research and Teaching Experience</h2>
+    ${sectionList(d.experiences, (e)=>{
+      const bullets = String(e.desc||"").split("\n").map(x=>x.trim()).filter(Boolean);
+      return `
+        <div class="entry">
+          <div class="row"><div class="left org">${escapeHTML(e.company||"")}</div><div class="right">${escapeHTML(e.dates||"")}</div></div>
+          <div class="line">${escapeHTML(e.role||"")}</div>
+          ${bullets.map(b=>`<div class="indent line">${escapeHTML(b)}</div>`).join("")}
+        </div>
+      `;
+    })}
+  `:""}
+
+  ${d.publications?.length?`
+    <h2>Publications</h2>
+    <div class="entry">
+      ${d.publications.map(p=>`<div class="line">${escapeHTML(p.year||"")}. <strong>${escapeHTML(p.title||"")}</strong>${p.venue?`. ${escapeHTML(p.venue)}.`:""}</div>`).join("")}
+    </div>
+  `:""}
+
+  ${d.certifications?.length?`
+    <h2>Professional Development</h2>
+    ${sectionList(d.certifications, (c)=>`
+      <div class="entry">
+        <div class="row"><div class="left org">${escapeHTML(c.issuer||"")}</div><div class="right">${escapeHTML(c.date||"")}</div></div>
+        <div class="line">${escapeHTML(c.name||"")}</div>
+      </div>
+    `)}
+  `:""}
+</div>`;
+  return templateBase(`${d.name||"CV"} — US Academic`, css, body);
+}
+
+const templateFns = {
+  ats: tplATS,
+  modern: tplModernEdge,
+  african: tplAfrican,
+  asian: tplAsian,
+  teacher: tplTeacher,
+  europass: tplEuropass,
+  usacademic: tplUSAcademic
+};
+
+function getTemplateHTML(id, d) {
+  if (id === "builder") return "";
+  const fn = templateFns[id] || tplATS;
+  return fn(d);
+}
+
+/* ===========================
+   BUILDER PREVIEW (simple live layout)
+=========================== */
+function renderBuilderPreview() {
+  const shell = document.getElementById("previewShell");
+  const contacts = [];
+  if (cvData.location) contacts.push(escapeHTML(cvData.location));
+  if (cvData.phone) contacts.push(escapeHTML(cvData.phone));
+  if (cvData.email) contacts.push(escapeHTML(cvData.email));
+  if (cvData.linkedin) contacts.push(`<a href="${safeUrl(cvData.linkedin)}" target="_blank" class="hover:underline text-emerald-600">LinkedIn</a>`);
+  if (cvData.website) contacts.push(`<a href="${safeUrl(cvData.website)}" target="_blank" class="hover:underline text-emerald-600">Website</a>`);
+
+  const listSection = (title, items) => items?.length ? `
+    <div class="mt-10">
+      <div class="uppercase text-emerald-600 text-xs tracking-widest font-medium mb-3">${escapeHTML(title)}</div>
+      <ul class="text-sm list-disc text-zinc-700 space-y-1">
+        ${items.map(x=>`<li class="ml-5">${escapeHTML(x)}</li>`).join("")}
+      </ul>
+    </div>` : "";
+
+  const body = `
+<div class="max-w-[680px] mx-auto">
+  ${cvData.photo ? `<img src="${cvData.photo}" class="w-24 h-24 rounded-2xl mx-auto mb-6 object-cover ring-4 ring-emerald-200 shadow">` : ""}
+  <h1 class="text-4xl font-bold text-center tracking-tight">${escapeHTML(cvData.name || "Your Name")}</h1>
+  <p class="text-center text-emerald-600 text-xl mt-1">${escapeHTML(cvData.title || "Your Title")}</p>
+
+  <div class="flex justify-center gap-x-6 gap-y-1 text-sm mt-6 text-zinc-600 flex-wrap">
+    ${contacts.map(c => `<span>${c}</span>`).join('<span class="text-zinc-400">•</span>')}
+  </div>
+
+  ${cvData.summary?.trim() ? `
+    <div class="mt-12">
+      <div class="uppercase text-emerald-600 text-xs tracking-widest font-medium mb-3">Professional Summary</div>
+      <p class="text-zinc-700 leading-relaxed">${escapeHTML(cvData.summary).replaceAll("\n","<br>")}</p>
+    </div>` : ""}
+
+  ${cvData.highlights?.length ? `
+    <div class="mt-12">
+      <div class="uppercase text-emerald-600 text-xs tracking-widest font-medium mb-3">Key Highlights</div>
+      <ul class="text-sm list-disc text-zinc-700 space-y-1">${cvData.highlights.map(h=>`<li class="ml-5">${escapeHTML(h)}</li>`).join("")}</ul>
+    </div>` : ""}
+
+  ${cvData.experiences?.length ? `
+    <div class="mt-12">
+      <div class="uppercase text-emerald-600 text-xs tracking-widest font-medium mb-6">Experience</div>
+      ${cvData.experiences.map(exp=>{
+        const bullets = String(exp.desc||"").split("\n").map(x=>x.trim()).filter(Boolean);
+        return `
+          <div class="mb-10">
+            <div class="flex justify-between items-baseline gap-6">
+              <div class="font-semibold">${escapeHTML(exp.role || "Role")}</div>
+              <div class="text-sm text-zinc-500 whitespace-nowrap">${escapeHTML(exp.dates || "Dates")}</div>
+            </div>
+            <div class="text-zinc-600">${escapeHTML(exp.company || "Company")}</div>
+            ${bullets.length ? `<ul class="mt-3 text-sm list-disc text-zinc-700 space-y-1">${bullets.map(l=>`<li class="ml-5">${escapeHTML(l)}</li>`).join("")}</ul>` : ""}
+          </div>
+        `;
+      }).join("")}
+    </div>` : ""}
+
+  ${cvData.educations?.length ? `
+    <div class="mt-12">
+      <div class="uppercase text-emerald-600 text-xs tracking-widest font-medium mb-6">Education</div>
+      ${cvData.educations.map(ed=>`
+        <div class="mb-8">
+          <div class="flex justify-between gap-6">
+            <div class="font-semibold">${escapeHTML(ed.degree || "Degree")}</div>
+            <div class="text-sm text-zinc-500 whitespace-nowrap">${escapeHTML(ed.dates || "Dates")}</div>
+          </div>
+          <div class="text-zinc-600">${escapeHTML(ed.school || "School")}</div>
+          ${ed.gpa ? `<div class="text-xs text-zinc-500 mt-1">${escapeHTML(ed.gpa)}</div>` : ""}
+        </div>
+      `).join("")}
+    </div>` : ""}
+
+  ${listSection("Certifications", cvData.certifications?.map(c=>`${c.name}${c.issuer?` — ${c.issuer}`:""}${c.date?` (${c.date})`:""}`))}
+  ${listSection("Publications", cvData.publications?.map(p=>`${p.year?`${p.year} — `:""}${p.title}${p.venue?` (${p.venue})`:""}`))}
+  ${listSection("Conference Presentations", cvData.presentations?.map(p=>`${p.date?`${p.date} — `:""}${p.title}${p.event?` (${p.event})`:""}${p.note?` — ${p.note}`:""}`))}
+  ${listSection("Grants & Fellowships", cvData.grants?.map(g=>`${g.year?`${g.year} — `:""}${g.name}${g.org?` (${g.org})`:""}${g.note?` — ${g.note}`:""}`))}
+  ${listSection("Memberships", cvData.memberships)}
+  ${listSection("Skills", cvData.skills)}
+  ${listSection("Languages", cvData.languages)}
+
+  ${(cvData.references?.length || cvData.referencesNote?.trim()) ? `
+    <div class="mt-10">
+      <div class="uppercase text-emerald-600 text-xs tracking-widest font-medium mb-3">References</div>
+      ${cvData.references.map(r=>`
+        <div class="text-sm text-zinc-700 mb-2">
+          <div class="font-semibold">${escapeHTML(r.name||"")}</div>
+          ${r.title?`<div class="text-zinc-600">${escapeHTML(r.title)}</div>`:""}
+          ${r.phone?`<div class="text-zinc-600">Phone: ${escapeHTML(r.phone)}</div>`:""}
+          ${r.email?`<div class="text-zinc-600">Email: ${escapeHTML(r.email)}</div>`:""}
+        </div>
+      `).join("")}
+      ${cvData.referencesNote?`<div class="text-xs text-zinc-500 mt-2">${escapeHTML(cvData.referencesNote)}</div>`:""}
+    </div>` : ""}
+
+</div>`;
+  shell.innerHTML = body;
+}
+
+/* ===========================
+   TEMPLATE PREVIEW RENDER
+=========================== */
+function renderTemplatePreview() {
+  const shell = document.getElementById("previewShell");
+  const html = getTemplateHTML(currentTemplateId, cvData);
+
+  shell.innerHTML = `
+    <div class="flex items-center justify-between gap-3 mb-4">
+      <div class="text-sm text-zinc-700">
+        <span class="font-semibold">Template:</span> ${escapeHTML(templates.find(t=>t.id===currentTemplateId)?.name || currentTemplateId)}
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="text-xs px-3 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200" onclick="openTemplateInNewTab('${currentTemplateId}')">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Open
+        </button>
+        <button class="text-xs px-3 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200" onclick="setTemplate('builder', true)">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Builder
+        </button>
+      </div>
+    </div>
+    <iframe class="tpl-iframe" id="tplFrame"></iframe>
+  `;
+
+  const iframe = document.getElementById("tplFrame");
+  iframe.srcdoc = html;
+}
+
+/* ===========================
+   MASTER RENDER
+=========================== */
+function renderAll() {
+  calculateCompletion();
+  renderExp();
+  renderEdu();
+  renderHighlights();
+  renderCerts();
+  renderPubs();
+  renderPresentations();
+  renderGrants();
+  renderMemberships();
+  renderSkills();
+  renderLanguages();
+  renderRefs();
+  bindPersonalInputsFromData();
+  bindReferencesNoteFromData();
+
+  if (currentTemplateId === "builder") renderBuilderPreview();
+  else renderTemplatePreview();
+
+  saveToLocal();
+}
+
+/* ===========================
+   PHOTO
+=========================== */
+function handlePhoto(input) {
+  if (!input.files || !input.files[0]) return;
+  const file = input.files[0];
+
+  const MAX_MB = 2.5;
+  if (file.size > MAX_MB * 1024 * 1024) {
+    toast(`Photo too large. Please use an image under ${MAX_MB}MB.`, "warn");
+    input.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    cvData.photo = e.target.result;
+    document.getElementById("photoPreview").innerHTML = `<img src="${cvData.photo}" class="w-full h-full object-cover">`;
+    document.getElementById("removePhotoBtn").classList.remove("hidden");
+    toast("Photo added.");
+    renderAll();
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto() {
+  cvData.photo = "";
+  document.getElementById("photoPreview").innerHTML = `<i class="fas fa-camera text-3xl text-zinc-500"></i>`;
+  document.getElementById("removePhotoBtn").classList.add("hidden");
+  document.getElementById("photoInput").value = "";
+  toast("Photo removed.", "warn");
+  renderAll();
+}
+
+/* ===========================
+   EXPERIENCE
+=========================== */
+function addExp() {
+  cvData.experiences.push({role:"", company:"", dates:"", desc:""});
+  toast("Experience added.");
+  renderAll();
+}
+function renderExp() {
+  const container = document.getElementById("expContainer");
+  container.innerHTML = (cvData.experiences || []).map((exp, i) => `
+    <div class="glass border border-zinc-700 rounded-3xl p-6">
+      <input value="${escapeHTML(exp.role)}" oninput="cvData.experiences[${i}].role=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Role">
+      <input value="${escapeHTML(exp.company)}" oninput="cvData.experiences[${i}].company=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 mt-4 pb-2 text-white" placeholder="Company">
+      <input value="${escapeHTML(exp.dates)}" oninput="cvData.experiences[${i}].dates=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 mt-4 pb-2 text-white" placeholder="Dates">
+      <textarea oninput="cvData.experiences[${i}].desc=this.value;renderAll()" class="w-full mt-4 h-28 bg-zinc-800 rounded-2xl p-4 text-sm" placeholder="One bullet per line...">${escapeHTML(exp.desc)}</textarea>
+
+      <div class="flex gap-3 mt-4">
+        <button onclick="moveExp(${i}, -1)" class="text-xs text-zinc-400 hover:text-white"><i class="fas fa-arrow-up"></i></button>
+        <button onclick="moveExp(${i}, 1)" class="text-xs text-zinc-400 hover:text-white"><i class="fas fa-arrow-down"></i></button>
+        <button onclick="cvData.experiences.splice(${i},1);toast('Experience removed.','warn');renderAll()" class="text-red-400 text-xs ml-auto">Remove</button>
+      </div>
+    </div>
+  `).join("");
+}
+function moveExp(i, dir) {
+  const newI = i + dir;
+  if (newI < 0 || newI >= cvData.experiences.length) return;
+  [cvData.experiences[i], cvData.experiences[newI]] = [cvData.experiences[newI], cvData.experiences[i]];
+  renderAll();
+}
+
+/* ===========================
+   EDUCATION
+=========================== */
+function addEdu() {
+  cvData.educations.push({degree:"", school:"", dates:"", gpa:""});
+  toast("Education added.");
+  renderAll();
+}
+function renderEdu() {
+  const container = document.getElementById("eduContainer");
+  container.innerHTML = (cvData.educations || []).map((ed, i) => `
+    <div class="glass border border-zinc-700 rounded-3xl p-6">
+      <input value="${escapeHTML(ed.degree)}" oninput="cvData.educations[${i}].degree=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Degree">
+      <input value="${escapeHTML(ed.school)}" oninput="cvData.educations[${i}].school=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 mt-4 pb-2 text-white" placeholder="School">
+      <input value="${escapeHTML(ed.dates)}" oninput="cvData.educations[${i}].dates=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 mt-4 pb-2 text-white" placeholder="Dates">
+      <input value="${escapeHTML(ed.gpa)}" oninput="cvData.educations[${i}].gpa=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 mt-4 pb-2 text-white" placeholder="GPA / Notes (optional)">
+
+      <div class="flex gap-3 mt-4">
+        <button onclick="moveEdu(${i}, -1)" class="text-xs text-zinc-400 hover:text-white"><i class="fas fa-arrow-up"></i></button>
+        <button onclick="moveEdu(${i}, 1)" class="text-xs text-zinc-400 hover:text-white"><i class="fas fa-arrow-down"></i></button>
+        <button onclick="cvData.educations.splice(${i},1);toast('Education removed.','warn');renderAll()" class="text-red-400 text-xs ml-auto">Remove</button>
+      </div>
+    </div>
+  `).join("");
+}
+function moveEdu(i, dir) {
+  const newI = i + dir;
+  if (newI < 0 || newI >= cvData.educations.length) return;
+  [cvData.educations[i], cvData.educations[newI]] = [cvData.educations[newI], cvData.educations[i]];
+  renderAll();
+}
+
+/* ===========================
+   HIGHLIGHTS
+=========================== */
+function addHighlight() {
+  cvData.highlights.push("");
+  toast("Highlight added.");
+  renderAll();
+}
+function renderHighlights() {
+  const c = document.getElementById("highlightsContainer");
+  c.innerHTML = (cvData.highlights||[]).map((h,i)=>`
+    <div class="glass border border-zinc-700 rounded-3xl p-4">
+      <input value="${escapeHTML(h)}" oninput="cvData.highlights[${i}]=this.value;renderAll()" class="w-full bg-transparent border-b border-zinc-600 pb-2 text-white text-sm" placeholder="e.g. Improved pass rate by 18%...">
+      <div class="flex mt-3">
+        <button onclick="cvData.highlights.splice(${i},1);toast('Highlight removed.','warn');renderAll()" class="text-red-400 text-xs ml-auto">Remove</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* ===========================
+   CERTIFICATIONS
+=========================== */
+function addCertification() {
+  cvData.certifications.push({name:"", issuer:"", date:""});
+  toast("Certification added.");
+  renderAll();
+}
+function renderCerts() {
+  const c = document.getElementById("certsContainer");
+  c.innerHTML = (cvData.certifications||[]).map((x,i)=>`
+    <div class="glass border border-zinc-700 rounded-3xl p-6">
+      <input value="${escapeHTML(x.name)}" oninput="cvData.certifications[${i}].name=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Certification">
+      <input value="${escapeHTML(x.issuer)}" oninput="cvData.certifications[${i}].issuer=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 mt-4 pb-2 text-white" placeholder="Issuer (e.g. Coursera / University)">
+      <input value="${escapeHTML(x.date)}" oninput="cvData.certifications[${i}].date=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 mt-4 pb-2 text-white" placeholder="Date (optional)">
+      <div class="flex mt-4">
+        <button onclick="cvData.certifications.splice(${i},1);toast('Certification removed.','warn');renderAll()" class="text-red-400 text-xs ml-auto">Remove</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* ===========================
+   PUBLICATIONS
+=========================== */
+function addPublication() {
+  cvData.publications.push({title:"", venue:"", year:""});
+  toast("Publication added.");
+  renderAll();
+}
+function renderPubs() {
+  const c = document.getElementById("pubsContainer");
+  c.innerHTML = (cvData.publications||[]).map((p,i)=>`
+    <div class="glass border border-zinc-700 rounded-3xl p-6">
+      <input value="${escapeHTML(p.title)}" oninput="cvData.publications[${i}].title=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Title">
+      <input value="${escapeHTML(p.venue)}" oninput="cvData.publications[${i}].venue=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 mt-4 pb-2 text-white" placeholder="Venue (e.g. Journal / Amazon Kindle)">
+      <input value="${escapeHTML(p.year)}" oninput="cvData.publications[${i}].year=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 mt-4 pb-2 text-white" placeholder="Year">
+      <div class="flex mt-4">
+        <button onclick="cvData.publications.splice(${i},1);toast('Publication removed.','warn');renderAll()" class="text-red-400 text-xs ml-auto">Remove</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* ===========================
+   PRESENTATIONS
+=========================== */
+function addPresentation() {
+  cvData.presentations.push({title:"", event:"", date:"", note:""});
+  toast("Presentation added.");
+  renderAll();
+}
+function renderPresentations() {
+  const c = document.getElementById("presentationsContainer");
+  c.innerHTML = (cvData.presentations||[]).map((p,i)=>`
+    <div class="glass border border-zinc-700 rounded-3xl p-6">
+      <input value="${escapeHTML(p.title)}" oninput="cvData.presentations[${i}].title=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Talk / Paper title">
+      <input value="${escapeHTML(p.event)}" oninput="cvData.presentations[${i}].event=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 mt-4 pb-2 text-white" placeholder="Conference / Event">
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <input value="${escapeHTML(p.date)}" oninput="cvData.presentations[${i}].date=this.value;renderAll()" class="bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Date">
+        <input value="${escapeHTML(p.note)}" oninput="cvData.presentations[${i}].note=this.value;renderAll()" class="bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Note (e.g. Paper presentation)">
+      </div>
+      <div class="flex mt-4">
+        <button onclick="cvData.presentations.splice(${i},1);toast('Presentation removed.','warn');renderAll()" class="text-red-400 text-xs ml-auto">Remove</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* ===========================
+   GRANTS
+=========================== */
+function addGrant() {
+  cvData.grants.push({name:"", org:"", year:"", note:""});
+  toast("Grant added.");
+  renderAll();
+}
+function renderGrants() {
+  const c = document.getElementById("grantsContainer");
+  c.innerHTML = (cvData.grants||[]).map((g,i)=>`
+    <div class="glass border border-zinc-700 rounded-3xl p-6">
+      <input value="${escapeHTML(g.name)}" oninput="cvData.grants[${i}].name=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Grant / Fellowship name">
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <input value="${escapeHTML(g.org)}" oninput="cvData.grants[${i}].org=this.value;renderAll()" class="bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Org">
+        <input value="${escapeHTML(g.year)}" oninput="cvData.grants[${i}].year=this.value;renderAll()" class="bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Year">
+      </div>
+      <textarea oninput="cvData.grants[${i}].note=this.value;renderAll()" class="w-full mt-4 h-24 bg-zinc-800 rounded-2xl p-4 text-sm" placeholder="Note (optional)">${escapeHTML(g.note)}</textarea>
+      <div class="flex mt-4">
+        <button onclick="cvData.grants.splice(${i},1);toast('Grant removed.','warn');renderAll()" class="text-red-400 text-xs ml-auto">Remove</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* ===========================
+   MEMBERSHIPS (chips)
+=========================== */
+function renderMemberships() {
+  const c = document.getElementById("membershipsContainer");
+  c.innerHTML = (cvData.memberships||[]).map((m,i)=>`
+    <div class="chip bg-zinc-800 text-white px-4 py-2 rounded-3xl text-sm flex items-center gap-2">
+      ${escapeHTML(m)}
+      <button onclick="cvData.memberships.splice(${i},1);toast('Membership removed.','warn');renderAll()" class="text-red-400 hover:text-red-500 text-lg leading-none">×</button>
+    </div>
+  `).join("");
+}
+function addMembership() {
+  const input = document.getElementById("newMembership");
+  const val = input.value.trim();
+  if (!val) return;
+  if (cvData.memberships.includes(val)) return toast("Membership already added.", "warn");
+  cvData.memberships.push(val);
+  input.value = "";
+  toast("Membership added.");
+  renderAll();
+}
+
+/* ===========================
+   SKILLS & LANGUAGES (chips)
+=========================== */
+function renderSkills() {
+  const container = document.getElementById("skillsContainer");
+  container.innerHTML = (cvData.skills || []).map((skill, i) => `
+    <div class="chip bg-zinc-800 text-white px-4 py-2 rounded-3xl text-sm flex items-center gap-2">
+      ${escapeHTML(skill)}
+      <button onclick="removeSkill(${i})" class="text-red-400 hover:text-red-500 text-lg leading-none">×</button>
+    </div>
+  `).join("");
+}
+function addSkill() {
+  const input = document.getElementById("newSkill");
+  const val = input.value.trim();
+  if (!val) return;
+  if (cvData.skills.includes(val)) return toast("Skill already added.", "warn");
+  cvData.skills.push(val);
+  input.value = "";
+  toast("Skill added.");
+  renderAll();
+}
+function removeSkill(i) {
+  cvData.skills.splice(i, 1);
+  toast("Skill removed.", "warn");
+  renderAll();
+}
+function renderLanguages() {
+  const container = document.getElementById("languagesContainer");
+  container.innerHTML = (cvData.languages || []).map((lang, i) => `
+    <div class="chip bg-emerald-900 text-emerald-100 px-4 py-2 rounded-3xl text-sm flex items-center gap-2">
+      ${escapeHTML(lang)}
+      <button onclick="removeLanguage(${i})" class="text-red-200 hover:text-red-300 text-lg leading-none">×</button>
+    </div>
+  `).join("");
+}
+function addLanguage() {
+  const input = document.getElementById("newLanguage");
+  const val = input.value.trim();
+  if (!val) return;
+  if (cvData.languages.includes(val)) return toast("Language already added.", "warn");
+  cvData.languages.push(val);
+  input.value = "";
+  toast("Language added.");
+  renderAll();
+}
+function removeLanguage(i) {
+  cvData.languages.splice(i, 1);
+  toast("Language removed.", "warn");
+  renderAll();
+}
+
+/* ===========================
+   REFERENCES
+=========================== */
+function addReference() {
+  cvData.references.push({name:"", title:"", phone:"", email:""});
+  toast("Reference added.");
+  renderAll();
+}
+function renderRefs() {
+  const c = document.getElementById("refsContainer");
+  c.innerHTML = (cvData.references||[]).map((r,i)=>`
+    <div class="glass border border-zinc-700 rounded-3xl p-6">
+      <input value="${escapeHTML(r.name)}" oninput="cvData.references[${i}].name=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Name">
+      <input value="${escapeHTML(r.title)}" oninput="cvData.references[${i}].title=this.value;renderAll()" class="block w-full bg-transparent border-b border-zinc-600 mt-4 pb-2 text-white" placeholder="Title / Organization">
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <input value="${escapeHTML(r.phone)}" oninput="cvData.references[${i}].phone=this.value;renderAll()" class="bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Phone">
+        <input value="${escapeHTML(r.email)}" oninput="cvData.references[${i}].email=this.value;renderAll()" class="bg-transparent border-b border-zinc-600 pb-2 text-white" placeholder="Email">
+      </div>
+      <div class="flex mt-4">
+        <button onclick="cvData.references.splice(${i},1);toast('Reference removed.','warn');renderAll()" class="text-red-400 text-xs ml-auto">Remove</button>
+      </div>
+    </div>
+  `).join("");
+}
+function bindReferencesNoteFromData() {
+  const el = document.getElementById("referencesNote");
+  if (el.value !== (cvData.referencesNote||"")) el.value = cvData.referencesNote || "";
+}
+
+/* ===========================
+   PERSONAL DETAILS
+=========================== */
+function bindPersonalInputsFromData() {
+  const map = [
+    ["nationality","nationality"],
+    ["dob","dob"],
+    ["maritalStatus","maritalStatus"],
+    ["relocation","relocation"],
+    ["noticePeriod","noticePeriod"]
+  ];
+  map.forEach(([id,key])=>{
+    const el = document.getElementById(id);
+    const v = (cvData.personal?.[key] || "");
+    if (el.value !== v) el.value = v;
+  });
+}
+
+/* ===========================
+   TEMPLATE SELECTION + SAMPLE AUTOLOAD
+=========================== */
+function setTemplate(id, styleOnly=false) {
+  currentTemplateId = id;
+  if (!styleOnly && id !== "builder") {
+    const sample = sampleById[id];
+    if (sample) {
+      cvData = normalizeData({...cvData, ...normalizeData(sample)});
+      bindInputsFromData();
+      toast("Sample loaded + template applied.");
+    } else {
+      toast("Template applied.");
+    }
+  } else {
+    toast(id === "builder" ? "Builder preview enabled." : "Template applied (style only).");
+  }
+  renderAll();
+}
+
+function loadSample(id="ats") {
+  cvData = normalizeData(sampleById[id] || sampleById.ats);
+  currentTemplateId = id === "builder" ? "builder" : id;
+  bindInputsFromData();
+  toast("Sample loaded.");
+  renderAll();
+}
+
+function openTemplateInNewTab(id) {
+  const filledHTML = id === "builder"
+    ? document.getElementById("previewShell").innerHTML
+    : getTemplateHTML(id, cvData);
+  const blob = new Blob([filledHTML], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  window.open(url, "_blank");
+}
+
+function showTemplates() {
+  document.getElementById("templateModal").classList.remove("hidden");
+  const container = document.getElementById("modalGallery");
+  container.innerHTML = templates.filter(t=>t.id!=="builder").map(t => `
+    <div onclick="(function(){
+      const styleOnly = document.getElementById('styleOnlyToggle').checked;
+      setTemplate('${t.id}', styleOnly);
+      hideTemplates();
+    })()" class="group cursor-pointer bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 hover:border-emerald-500 rounded-3xl p-6 transition-all relative overflow-hidden">
+      <div class="h-44 bg-gradient-to-br from-zinc-700 to-zinc-900 rounded-2xl flex items-center justify-center text-7xl font-black text-white/10 group-hover:text-white/30 transition-colors">${escapeHTML(t.name[0])}</div>
+      <div class="mt-6 font-semibold text-lg">${escapeHTML(t.name)}</div>
+      <div class="text-xs text-zinc-300 mt-1">Click to ${"load sample + preview"} (or Style Only)</div>
+      <div class="absolute top-4 right-4 bg-emerald-600/90 text-[10px] px-3 py-1 rounded-full font-medium">Sample</div>
+    </div>
+  `).join("");
+}
+
+function hideTemplates() {
+  document.getElementById("templateModal").classList.add("hidden");
+}
+  
+  function tplBuilderPrint(d) {
+  const css = `
+:root{--text:#111;--muted:#444;--accent:#059669;}
+@page{size:A4;margin:14mm}
+html,body{margin:0;padding:0;background:#fff;color:var(--text);font-family:Inter,system-ui,sans-serif;font-size:11pt;line-height:1.35;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.page{width:210mm;min-height:297mm;margin:0 auto;box-sizing:border-box;padding:0}
+h1{font-size:22pt;margin:0;line-height:1.1;font-weight:800;text-align:center}
+h2{font-size:11pt;margin:16pt 0 6pt;font-weight:800;letter-spacing:.35px;text-transform:uppercase;color:var(--accent)}
+.contact{margin:8pt 0 0;text-align:center;color:var(--muted);font-size:10.5pt}
+.rule{border:0;border-top:1px solid #e5e7eb;margin:12pt 0}
+.block{break-inside:avoid;page-break-inside:avoid}
+.item{margin:0 0 10pt}
+.row{display:flex;justify-content:space-between;gap:10pt;align-items:baseline}
+.role{font-weight:700}
+.dates{color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.company{color:var(--muted);margin-top:1pt}
+ul{margin:4pt 0 0 16pt;padding:0}
+li{margin:2pt 0}
+.small{font-size:10.5pt;color:var(--muted)}
+a{color:inherit;text-decoration:none}
+`;
+  const contacts = [
+    d.location && escapeHTML(d.location),
+    d.phone && escapeHTML(d.phone),
+    d.email ? escapeHTML(d.email) : "",
+    d.linkedin ? escapeHTML(d.linkedin) : "",
+    d.website ? escapeHTML(d.website) : ""
+  ].filter(Boolean).join("  |  ");
+
+  const bullets = (text) =>
+    String(text || "")
+      .split("\n").map(x => x.trim()).filter(Boolean)
+      .map(b => `<li>${escapeHTML(b)}</li>`).join("");
+
+  const sectionList = (title, itemsHTML) =>
+    itemsHTML ? `<div class="block"><h2>${escapeHTML(title)}</h2>${itemsHTML}</div>` : "";
+
+  const expHTML = (d.experiences||[]).map(e => `
+    <div class="item">
+      <div class="row"><div class="role">${escapeHTML(e.role||"")}</div><div class="dates">${escapeHTML(e.dates||"")}</div></div>
+      <div class="company">${escapeHTML(e.company||"")}</div>
+      ${e.desc ? `<ul>${bullets(e.desc)}</ul>` : ""}
+    </div>
+  `).join("");
+
+  const eduHTML = (d.educations||[]).map(e => `
+    <div class="item">
+      <div class="row"><div class="role">${escapeHTML(e.degree||"")}</div><div class="dates">${escapeHTML(e.dates||"")}</div></div>
+      <div class="company">${escapeHTML(e.school||"")}</div>
+      ${e.gpa ? `<div class="small">${escapeHTML(e.gpa)}</div>` : ""}
+    </div>
+  `).join("");
+
+  const skillsHTML = (d.skills||[]).length ? `<ul>${(d.skills||[]).map(s=>`<li>${escapeHTML(s)}</li>`).join("")}</ul>` : "";
+  const langsHTML  = (d.languages||[]).length ? `<ul>${(d.languages||[]).map(s=>`<li>${escapeHTML(s)}</li>`).join("")}</ul>` : "";
+
+  const body = `
+<div class="page">
+  <h1>${escapeHTML(d.name||"Your Name")}</h1>
+  ${d.title ? `<div class="contact" style="color:var(--accent);font-weight:600">${escapeHTML(d.title)}</div>` : ""}
+  <div class="contact">${contacts}</div>
+  <hr class="rule"/>
+
+  ${d.summary?.trim() ? sectionList("Professional Summary", `<div>${escapeHTML(d.summary).replaceAll("\n","<br>")}</div>`) : ""}
+  ${eduHTML ? sectionList("Education", eduHTML) : ""}
+  ${expHTML ? sectionList("Experience", expHTML) : ""}
+  ${skillsHTML ? sectionList("Skills", skillsHTML) : ""}
+  ${langsHTML ? sectionList("Languages", langsHTML) : ""}
+</div>`;
+  return templateBase(`${d.name||"CV"} — Builder`, css, body);
+}
+  
+
+/* ===========================
+   EXPORT
+=========================== */
+function exportPDF() {
+  exportPDFText(); // replace old raster export with real text export
+}
+
+function exportPDFText() {
+  // Always export from template HTML (A4 in mm), not from preview DOM.
+  const htmlDoc =
+    currentTemplateId === "builder"
+      ? tplBuilderPrint(cvData)            // ✅ new A4 mm-based builder print template
+      : getTemplateHTML(currentTemplateId, cvData); // ✅ already full HTML docs
+
+  const w = window.open("", "_blank");
+  w.document.open();
+  w.document.write(htmlDoc);
+  w.document.close();
+
+  w.onload = () => {
+    w.focus();
+    w.print();
+  };
+}
+  
+function exportWord() {
+  try {
+    const html =
+      currentTemplateId === "builder"
+        ? document.getElementById("previewShell").innerHTML
+        : getTemplateHTML(currentTemplateId, cvData);
+
+    const wordDoc = `<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8"><title>CV</title></head>
+<body>${html}</body></html>`;
+
+    const blob = new Blob([wordDoc], { type: "application/msword" });
+    saveAs(blob, `${fileBaseName()}_Resume.doc`);
+    toast("Word file saved.");
+  } catch (e) {
+    console.error(e);
+    toast("Word export failed.", "error");
+  }
+}
+
+/* ===========================
+   RESET / CLEAR
+=========================== */
+function resetForm() {
+  if (!confirm("Reset editor fields to current data (rebind inputs)?")) return;
+  bindInputsFromData();
+  toast("Editor reset.");
+  renderAll();
+}
+
+function clearAll() {
+  if (!confirm("Delete ALL saved data permanently?")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  cvData = emptyData();
+  currentTemplateId = "builder";
+  bindInputsFromData();
+  document.getElementById("photoPreview").innerHTML = `<i class="fas fa-camera text-3xl text-zinc-500"></i>`;
+  document.getElementById("removePhotoBtn").classList.add("hidden");
+  document.getElementById("photoInput").value = "";
+  toast("All data cleared.", "warn");
+  renderAll();
+}
+
+/* ===========================
+   INPUT BINDING
+=========================== */
+function bindInputsFromData() {
+  document.getElementById("name").value = cvData.name || "";
+  document.getElementById("title").value = cvData.title || "";
+  document.getElementById("phone").value = cvData.phone || "";
+  document.getElementById("email").value = cvData.email || "";
+  document.getElementById("location").value = cvData.location || "";
+  document.getElementById("linkedin").value = cvData.linkedin || "";
+  document.getElementById("website").value = cvData.website || "";
+  document.getElementById("summary").value = cvData.summary || "";
+
+  if (cvData.photo) {
+    document.getElementById("photoPreview").innerHTML = `<img src="${cvData.photo}" class="w-full h-full object-cover">`;
+    document.getElementById("removePhotoBtn").classList.remove("hidden");
+  } else {
+    document.getElementById("photoPreview").innerHTML = `<i class="fas fa-camera text-3xl text-zinc-500"></i>`;
+    document.getElementById("removePhotoBtn").classList.add("hidden");
+  }
+
+  bindPersonalInputsFromData();
+  bindReferencesNoteFromData();
+}
+
+function attachLiveListeners() {
+  const liveFields = ["name","title","phone","email","location","linkedin","website","summary"];
+  liveFields.forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener("input", () => {
+      cvData[id] = el.value;
+      renderAll();
+    });
+  });
+
+  const personalMap = [
+    ["nationality","nationality"],
+    ["dob","dob"],
+    ["maritalStatus","maritalStatus"],
+    ["relocation","relocation"],
+    ["noticePeriod","noticePeriod"]
+  ];
+  personalMap.forEach(([id,key])=>{
+    const el = document.getElementById(id);
+    el.addEventListener("input", ()=>{
+      cvData.personal[key] = el.value;
+      renderAll();
+    });
+  });
+
+  document.getElementById("referencesNote").addEventListener("input", (e)=>{
+    cvData.referencesNote = e.target.value;
+    renderAll();
+  });
+
+  document.getElementById("newSkill").addEventListener("keydown", (e)=>{
+    if (e.key === "Enter") { e.preventDefault(); addSkill(); }
+  });
+  document.getElementById("newLanguage").addEventListener("keydown", (e)=>{
+    if (e.key === "Enter") { e.preventDefault(); addLanguage(); }
+  });
+  document.getElementById("newMembership").addEventListener("keydown", (e)=>{
+    if (e.key === "Enter") { e.preventDefault(); addMembership(); }
+  });
+}
+
+  function decodeCommonEntities(s) {
+  return String(s ?? "")
+    .replaceAll("&#8211;", "–")
+    .replaceAll("&ndash;", "–")
+    .replaceAll("&#8212;", "—")
+    .replaceAll("&mdash;", "—");
+}
+
+function normalizeData(d) {
+  const base = emptyData();
+  const merged = {...base, ...(d||{})};
+  merged.personal = {...base.personal, ...((d||{}).personal||{})};
+
+  // ✅ decode entity text in string fields
+  const strFields = ["name","title","phone","email","location","linkedin","website","summary","referencesNote"];
+  strFields.forEach(k => merged[k] = decodeCommonEntities(merged[k]));
+  if (merged.personal) {
+    Object.keys(merged.personal).forEach(k => merged.personal[k] = decodeCommonEntities(merged.personal[k]));
+  }
+
+  const arrFields = ["highlights","skills","languages","memberships"];
+  arrFields.forEach(k => merged[k] = Array.isArray(merged[k]) ? merged[k].map(decodeCommonEntities) : []);
+
+  // keep your existing array normalization
+  const objArrFields = ["experiences","educations","certifications","publications","presentations","grants","references"];
+  objArrFields.forEach(k => merged[k] = Array.isArray(merged[k]) ? merged[k] : []);
+
+  return merged;
+}
+/* ===========================
+   INIT
+=========================== */
+window.onload = () => {
+  loadFromLocal();
+  cvData = normalizeData(cvData);
+
+  bindInputsFromData();
+  attachLiveListeners();
+  renderAll();
+
+  const gallery = document.getElementById("templateGallery");
+  gallery.innerHTML = templates.map(t => `
+    <div onclick="${t.id==='builder' ? `setTemplate('builder', true)` : `setTemplate('${t.id}', false)`}"
+         class="cursor-pointer bg-zinc-800 hover:bg-zinc-700 p-5 rounded-3xl border ${t.id===currentTemplateId ? "border-emerald-500" : "border-transparent"} hover:border-emerald-500 transition-all text-center">
+      <div class="text-lg font-semibold">${escapeHTML(t.name)}</div>
+      <div class="text-xs ${t.id===currentTemplateId ? "text-emerald-300" : "text-emerald-400"} mt-1">
+        ${t.id===currentTemplateId ? "Selected" : (t.id==="builder" ? "Live builder" : "Click = load sample + preview")}
+      </div>
+    </div>
+  `).join("");
+
+  toast("Ready.");
+};
+
+  function fitPreview() {
+    const pane = document.getElementById("previewPane");
+    const wrap = document.getElementById("previewScaleWrap");
+    const shell = document.getElementById("previewShell");
+    if (!pane || !wrap || !shell) return;
+
+    // Available width inside the preview (subtract padding/scrollbar space)
+    const available = pane.clientWidth - 32; // small guard for padding
+    const paperWidth = shell.offsetWidth || 850; // your .a4 width is 850px
+    const scale = Math.min(1, available / paperWidth);
+
+    wrap.style.transform = `scale(${scale})`;
+    // Keep layout height correct so scrolling feels natural
+    wrap.style.width = `${paperWidth}px`;
+    wrap.style.height = `${shell.offsetHeight}px`;
+  }
+
+  window.addEventListener("resize", fitPreview);
+  window.addEventListener("load", fitPreview);
+
+  // Call fitPreview() after you re-render the preview HTML as well
+  // e.g., at the end of renderPreview() or updatePreview()
+//]]>
+</script>
+
+</body>
+</html>
