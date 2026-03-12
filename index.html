@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<title>Live CV Builder</title>
+<title>Live CV Builder — Upgraded</title>
 <style>
 * { box-sizing: border-box; }
 :root {
@@ -20,7 +20,7 @@
   --warn: #b86b00;
   --danger: #c62828;
 }
-body { font-family: "Lato", sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+body { font-family: "Lato", Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
 .top-header {
   position: fixed; top: 0; left: 0; width: 100%; height: 48px; background: linear-gradient(90deg,#151515,#262626); color: white;
   display: flex; align-items: center; justify-content: space-between; padding: 0 16px 0 20px; z-index: 1000; border-bottom: 2px solid #2e6fd8;
@@ -83,7 +83,7 @@ body { font-family: "Lato", sans-serif; margin: 0; background: var(--bg); color:
 .template-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .template-card { border: 1px solid #ddd; background: #fafafa; border-radius: 8px; padding: 10px; }
 .template-card h5 { margin: 0 0 6px 0; font-size: 12px; }
-.template-card p { margin: 0 0 10px 0; font-size: 12px; color: #555; line-height: 1.5; }
+.template-card p { margin: 0 0 10px 0; font-size: 12px; color: #555; line-height: 1.5; min-height: 32px; }
 .template-tag { display: inline-block; font-size: 11px; padding: 3px 7px; background: #ececec; border-radius: 999px; margin-bottom: 8px; }
 .template-thumb { height: 118px; border: 1px solid #d7d7d7; border-radius: 8px; background: #fff; margin-bottom: 10px; overflow:hidden; position:relative; }
 .template-thumb-inner { position:absolute; inset:0; padding:10px; }
@@ -101,18 +101,27 @@ body { font-family: "Lato", sans-serif; margin: 0; background: var(--bg); color:
 }
 .preview-alert.show { display:block; }
 .cv-page {
-  width: 794px; min-height: 1123px; background: #fff; padding: 45px; box-shadow: 0 0 8px rgba(0,0,0,0.15); box-sizing: border-box; color: #222; position:relative;
+  width: 794px; min-height: 1123px; background: #fff; box-shadow: 0 0 8px rgba(0,0,0,0.15); box-sizing: border-box; color: #222; position:relative;
+  --page-font-family: "Lato", Arial, sans-serif;
+  --body-font-size: 15px;
+  --heading-size: 20px;
+  --body-line-height: 1.6;
+  --section-gap: 22px;
+  --page-padding: 45px;
+  font-family: var(--page-font-family);
+  padding: var(--page-padding);
 }
 .cv-header { border-bottom: 2px solid #222; padding-bottom: 14px; margin-bottom: 20px; }
-.cv-name { font-size: 34px; margin: 0; font-weight: 700; }
-.cv-title { font-size: 18px; margin: 8px 0 0; color: #555; }
+.cv-name { font-size: 34px; margin: 0; font-weight: 700; overflow-wrap:anywhere; }
+.cv-title { font-size: 18px; margin: 8px 0 0; color: #555; overflow-wrap:anywhere; }
 .cv-header-main { min-width: 0; }
-.cv-header-side, .cv-subheader { display: none; }
+.cv-header-side, .cv-subheader { display: none; overflow-wrap:anywhere; word-break:break-word; white-space:normal; }
 .cv-header-side { min-width: 0; }
 .cv-subheader { margin-bottom: 16px; }
-.cv-section { margin-bottom: 22px; transition: background .16s ease, outline-color .16s ease, transform .16s ease; }
-.cv-section h3 { margin: 0 0 8px; font-size: 20px; border-bottom: 1px solid #ddd; padding-bottom: 4px; }
-.cv-content { line-height: 1.6; font-size: 15px; }
+.cv-section { margin-bottom: var(--section-gap); transition: background .16s ease, outline-color .16s ease, transform .16s ease; }
+.cv-section[hidden] { display: none !important; }
+.cv-section h3 { margin: 0 0 8px; font-size: var(--heading-size); border-bottom: 1px solid #ddd; padding-bottom: 4px; }
+.cv-content { line-height: var(--body-line-height); font-size: var(--body-font-size); overflow-wrap:anywhere; }
 .cv-content ul { margin: 6px 0 0 18px; padding: 0; }
 .cv-content li { margin-bottom: 4px; }
 .cv-content .entry { margin-bottom: 10px; }
@@ -130,36 +139,28 @@ body { font-family: "Lato", sans-serif; margin: 0; background: var(--bg); color:
 }
 .sidebar-divider { height: 1px; margin: 8px 10px; background: #2d2d2d; }
 .sidebar-btn {
-  width: 100%; border: 0; background: transparent; padding: 10px 6px; font-size: 24px; color: #818181; display: block; text-align: center; position: relative; cursor: pointer;
+  width: 100%; border: 0; background: transparent; padding: 10px 6px; font-size: 20px; color: #818181; display: block; text-align: center; position: relative; cursor: pointer;
 }
 .sidebar-btn:hover, .sidebar-btn:focus-visible { color: #f1f1f1; background: #1c1c1c; outline: none; }
+.sidebar-btn.active-section { color: #fff; background: #173357; }
 .sidebar-btn::-moz-focus-inner { border: 0; }
 .sidebar-item { position:relative; }
 .sidebar-state-dot {
   position:absolute; top:10px; right:10px; width:8px; height:8px; border-radius:50%; background:#555; border:1px solid rgba(255,255,255,.18);
 }
-/* form fields */
+.sidebar-state-dot.hidden { background:#555; }
+.sidebar-state-dot.partial { background:#b86b00; }
+.sidebar-state-dot.filled { background:#14804a; }
 .editor-box textarea,
 .editor-box input,
 .settings-panel input,
 .settings-panel select,
 .template-panel input,
-.template-panel select {
-  font-size: 12px;
-}
-
-/* panel buttons */
+.template-panel select,
 .template-panel button,
 .settings-panel button,
 .toolbar-btn,
-.editor-actions button {
-  font-size: 12px;
-}
-
-/* sidebar icon buttons */
-.sidebar-btn {
-  font-size: 20px;
-}
+.editor-actions button { font-size: 12px; }
 .editor-box textarea:focus, .editor-box input:focus, .settings-panel input:focus, .settings-panel select:focus, .template-panel button:focus, .settings-panel button:focus, .sidebar-btn:focus-visible, .cv-section:focus-visible, .cv-header:focus-visible {
   outline: 1px solid #1a73e8; outline-offset: 1px;
 }
@@ -185,6 +186,7 @@ body { font-family: "Lato", sans-serif; margin: 0; background: var(--bg); color:
 .quick-jump-list { max-height:280px; overflow:auto; }
 .quick-jump-item { padding:10px 14px; cursor:pointer; }
 .quick-jump-item:hover, .quick-jump-item.active { background:#f3f6fb; }
+
 /* Template classes */
 .cv-page.template-europass { background: #fff; width: 794px; min-height: 1123px; }
 .cv-page.template-europass .cv-header { display:flex; align-items:flex-end; justify-content:space-between; gap: 10mm; margin: 0 0 9mm 0; padding-bottom: 3mm; border-bottom: 2px solid #cfd7e3; }
@@ -199,7 +201,7 @@ body { font-family: "Lato", sans-serif; margin: 0; background: var(--bg); color:
 .cv-page.template-ats .cv-name { font-size: 20pt; line-height: 1.1; font-weight: 700; letter-spacing: .2px; }
 .cv-page.template-ats .cv-title { margin: 3pt 0 6pt 0; font-size: 12pt; font-weight: 500; color: #444; }
 .cv-page.template-ats .cv-header-side { display: block; width: 100%; margin-top: 6px; font-size: 10.5pt; color: #111; }
-.cv-page.template-ats .cv-header-side .contact-inline { white-space: nowrap; }
+.cv-page.template-ats .cv-header-side .contact-inline { white-space: normal; }
 .cv-page.template-ats .cv-header-side .sep { padding: 0 6px; color: #444; }
 .cv-page.template-ats #section-contact { display: none !important; }
 .cv-page.template-ats .cv-section { margin-bottom: 10pt !important; }
@@ -210,7 +212,7 @@ body { font-family: "Lato", sans-serif; margin: 0; background: var(--bg); color:
 .cv-page.template-asian .cv-header { display:flex; justify-content:space-between; gap:18px; border-bottom:2px solid #111; padding-bottom:10px; margin-bottom:14px; }
 .cv-page.template-asian .cv-name { font-size:22px; font-weight:700; margin:0; }
 .cv-page.template-asian .cv-title { margin-top:4px; color:#444; font-size:12.5px; }
-.cv-page.template-asian .cv-header-side { display:block; text-align:right; font-size:12px; color:#333; white-space:pre-line; }
+.cv-page.template-asian .cv-header-side { display:block; text-align:right; font-size:12px; color:#333; white-space:normal; }
 .cv-page.template-asian #section-contact { display: none !important; }
 .cv-page.template-asian .cv-section { margin-bottom:12px !important; }
 .cv-page.template-asian .cv-section h3 { font-size:13px !important; text-transform:uppercase; letter-spacing:0.6px; margin:16px 0 8px 0; border-bottom:1px solid #ccc; padding-bottom:4px; }
@@ -219,7 +221,7 @@ body { font-family: "Lato", sans-serif; margin: 0; background: var(--bg); color:
 .cv-page.template-academic .cv-header { display:flex; justify-content: space-between; align-items:flex-start; gap: 16pt; margin-bottom: 6pt; padding-bottom: 0; border-bottom: none; }
 .cv-page.template-academic .cv-name { font-weight:700; font-size:16pt; margin:0; }
 .cv-page.template-academic .cv-title { display:none; }
-.cv-page.template-academic .cv-subheader { display:block; text-align:right; color:#222; font-size:11pt; margin-top: 2pt; margin-bottom: 10pt; white-space: pre-line; border-top:1px solid #000; padding-top:6pt; }
+.cv-page.template-academic .cv-subheader { display:block; text-align:right; color:#222; font-size:11pt; margin-top: 2pt; margin-bottom: 10pt; border-top:1px solid #000; padding-top:6pt; }
 .cv-page.template-academic #section-contact { display: none !important; }
 .cv-page.template-academic .cv-section { margin-bottom: 8pt !important; break-inside: avoid; page-break-inside: avoid; }
 .cv-page.template-academic .cv-section h3 { margin: 12pt 0 6pt 0; font-size:11pt !important; font-weight:700; text-transform: uppercase; border-bottom:none; padding-bottom:0; font-family:"Times New Roman", Times, serif !important; }
@@ -227,7 +229,7 @@ body { font-family: "Lato", sans-serif; margin: 0; background: var(--bg); color:
 .cv-page.template-modernresume { background: linear-gradient(135deg, #f6f9ff 0, #fff 20%); }
 .cv-page.template-modernresume .cv-header { border-bottom: 3px solid #1a4f9c; }
 .cv-page.template-modernresume .cv-name, .cv-page.template-modernresume .cv-section h3 { color: #1a4f9c; }
-.cv-page.template-executiveresume .cv-header { background: #222; color: #fff; padding: 20px; margin: -45px -45px 20px -45px; }
+.cv-page.template-executiveresume .cv-header { background: #222; color: #fff; padding: 20px; margin: calc(var(--page-padding) * -1) calc(var(--page-padding) * -1) 20px calc(var(--page-padding) * -1); }
 .cv-page.template-executiveresume .cv-title { color: #e0e0e0; }
 .cv-page.template-executiveresume .cv-section h3 { border-bottom: 2px solid #222; }
 .cv-page.template-creativeResume { background: linear-gradient(90deg, #fff 0, #fff 72%, #f6f6f6 72%); }
@@ -242,15 +244,18 @@ body { font-family: "Lato", sans-serif; margin: 0; background: var(--bg); color:
   .cv-page { width: 100%; min-height: auto; }
   .editor-box { left: 70px; right: 70px; width: auto; }
   .template-grid { grid-template-columns: 1fr; }
+  .cv-page.template-europass .cv-section { grid-template-columns: 1fr; }
 }
 @media screen and (max-height: 450px) {
   .sidebar-left, .sidebar-right { padding-top: 15px; }
 }
+@page { size: auto; margin: 0; }
 @media print {
+  html, body { background: #fff; }
   .top-header, .sidebar-left, .sidebar-right, .top-section, .editor-box, .settings-panel, .template-panel, .status-bar, .preview-alert, .quick-jump { display: none !important; }
   .main { margin: 0; padding: 0; }
   .bottom-section { border: none; padding: 0; }
-  .a4-frame { background: white; border: none; padding: 0; }
+  .a4-frame { background: white; border: none; padding: 0; overflow: visible; }
   .cv-page { box-shadow: none; width: 100%; min-height: auto; }
 }
 </style>
@@ -266,7 +271,7 @@ body { font-family: "Lato", sans-serif; margin: 0; background: var(--bg); color:
 <div class="sidebar-left" id="leftSidebar"></div>
 <div class="sidebar-right">
   <div class="sidebar-title">Tools</div>
-  <button type="button" class="icon-btn sidebar-btn" data-label="Open Template Gallery" aria-label=" Templates" title="Templates" onclick="Panels.openTemplatePanel(event)"><i class="fa fa-fw fa-clone"></i></button>
+  <button type="button" class="icon-btn sidebar-btn" data-label="Open Template Gallery" aria-label="Templates" title="Templates" onclick="Panels.openTemplatePanel(event)"><i class="fa fa-fw fa-clone"></i></button>
   <button type="button" class="icon-btn sidebar-btn" data-label="CV Settings" aria-label="CV settings" title="CV settings" onclick="Panels.openSettings(event)"><i class="fa fa-fw fa-cog"></i></button>
   <button type="button" class="icon-btn sidebar-btn" data-label="Quick Section Search" aria-label="Quick search" title="Quick search" onclick="QuickJump.open()"><i class="fa fa-fw fa-search"></i></button>
   <div class="sidebar-divider"></div>
@@ -279,27 +284,25 @@ body { font-family: "Lato", sans-serif; margin: 0; background: var(--bg); color:
   <button type="button" class="icon-btn sidebar-btn" data-label="Print / Save PDF" aria-label="Print or save PDF" title="Print or save PDF" onclick="window.print()"><i class="fa fa-fw fa-print"></i></button>
   <button type="button" class="icon-btn sidebar-btn" data-label="Close Panels" aria-label="Close open panels" title="Close open panels" onclick="Panels.closeAll(event)"><i class="fa fa-fw fa-times"></i></button>
 </div>
-
 <div id="editorBox" class="editor-box" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
   <h3 id="editorTitle">Edit Section</h3>
   <small id="editorHint">Use plain text, bullets, and line breaks. The live preview updates while you type.</small>
   <div class="editor-grid" id="editorHeaderFields" style="display:none;">
-  <div class="editor-field" id="quickNameWrap">
-    <label for="quickNameInput">Name</label>
-    <input id="quickNameInput" type="text" autocomplete="name" placeholder="Your name">
+    <div class="editor-field" id="quickNameWrap">
+      <label for="quickNameInput">Name</label>
+      <input id="quickNameInput" type="text" autocomplete="name" placeholder="Your name">
+    </div>
+    <div class="editor-field" id="quickTitleWrap">
+      <label for="quickTitleInput">Title</label>
+      <input id="quickTitleInput" type="text" autocomplete="organization-title" placeholder="Target role or headline">
+    </div>
   </div>
-  <div class="editor-field" id="quickTitleWrap">
-    <label for="quickTitleInput">Title</label>
-    <input id="quickTitleInput" type="text" autocomplete="organization-title" placeholder="Target role or headline">
-  </div>
-</div>
   <textarea id="editorInput" placeholder="Type here..." aria-label="Section content editor"></textarea>
   <div class="editor-actions">
     <button onclick="Editor.saveContent()">Save</button>
     <button onclick="Editor.close()">Close</button>
   </div>
 </div>
-
 <div id="templatePanel" class="template-panel">
   <div class="settings-header">
     <h3>Template Gallery</h3>
@@ -471,41 +474,13 @@ const Utils = {
   isBlank(value) { return !String(value || '').trim(); },
   placeholderFor(id) {
     const map = {
-      profile: 'Add a concise summary tailored to the target role.',
-      objective: 'State the role, domain, or programme you are targeting.',
-      contact: 'Add email, phone, location, portfolio, LinkedIn, or ORCID.',
-      personalDetails: 'Add market-relevant details only.',
-      skills: 'Add tools, methods, stacks, or competencies.',
-      coreCompetencies: 'Add short strengths separated by pipes or bullets.',
-      experience: 'Add role, employer, dates, and measurable outcomes.',
-      internships: 'Add internship title, organisation, dates, and impact.',
-      education: 'Add degree, institution, dates, and distinctions.',
-      projects: 'Add project title, tools, outcomes, and links.',
-      research: 'Add themes, grants, methods, labs, and current agenda.',
-      publications: 'Add citations in academic or industry format.',
-      presentations: 'Add talks, posters, panels, invited lectures.',
-      certifications: 'Add licences, certificates, and issuing body.',
-      awards: 'Add awards, scholarships, fellowships, recognitions.',
-      achievements: 'Add quantified results, improvements, promotions.',
-      volunteer: 'Add community work and responsibilities.',
-      leadership: 'Add supervision, committees, boards, lead roles.',
-      memberships: 'Add societies, associations, affiliations.',
-      languages: 'Add language and proficiency level.',
-      interests: 'Add selective interests aligned with profile.',
-      references: 'Add referees or “Available on request”.'
+      profile: 'Add a concise summary tailored to the target role.', objective: 'State the role, domain, or programme you are targeting.', contact: 'Add email, phone, location, portfolio, LinkedIn, or ORCID.', personalDetails: 'Add market-relevant details only.', skills: 'Add tools, methods, stacks, or competencies.', coreCompetencies: 'Add short strengths separated by pipes or bullets.', experience: 'Add role, employer, dates, and measurable outcomes.', internships: 'Add internship title, organisation, dates, and impact.', education: 'Add degree, institution, dates, and distinctions.', projects: 'Add project title, tools, outcomes, and links.', research: 'Add themes, grants, methods, labs, and current agenda.', publications: 'Add citations in academic or industry format.', presentations: 'Add talks, posters, panels, invited lectures.', certifications: 'Add licences, certificates, and issuing body.', awards: 'Add awards, scholarships, fellowships, recognitions.', achievements: 'Add quantified results, improvements, promotions.', volunteer: 'Add community work and responsibilities.', leadership: 'Add supervision, committees, boards, lead roles.', memberships: 'Add societies, associations, affiliations.', languages: 'Add language and proficiency level.', interests: 'Add selective interests aligned with profile.', references: 'Add referees or “Available on request”.'
     };
     return map[id] || 'Add content here.';
   },
   templateDescription(key) {
     const map = {
-      europass: '',
-      ats: '',
-      asian: '',
-      academic: '',
-      modernresume: '',
-      executiveresume: '',
-      creativeResume: '',
-      minimalresume: ''
+      europass: 'EU-style structured CV with left labels and dense detail.', ats: 'ATS-safe text-first CV optimized for parsers and recruiters.', asian: 'Conservative professional CV with personal-details support.', academic: 'US-style academic CV for research and faculty roles.', modernresume: 'Contemporary single-page resume with clean emphasis.', executiveresume: 'Leadership-oriented one-page resume for senior roles.', creativeResume: 'Visual resume with stronger stylistic accents.', minimalresume: 'Plain, ATS-friendly resume with minimal decoration.'
     };
     return map[key] || '';
   }
@@ -606,15 +581,17 @@ const Preview = {
     const headerSide = document.getElementById('cvHeaderSide');
     const subHeader = document.getElementById('cvSubHeader');
     const contactText = Preview.getRaw('contact');
-    headerSide.innerHTML = ''; subHeader.innerHTML = '';
-    headerSide.style.display = 'none'; subHeader.style.display = 'none';
+    headerSide.innerHTML = '';
+    subHeader.innerHTML = '';
+    headerSide.style.display = 'none';
+    subHeader.style.display = 'none';
     if (currentTemplateKey === 'ats' || currentTemplateKey === 'asian') {
       headerSide.innerHTML = Preview.formatHeaderContact(currentTemplateKey, contactText);
       headerSide.style.display = contactText.trim() ? 'block' : 'none';
     }
     if (currentTemplateKey === 'academic') {
       subHeader.innerHTML = Preview.formatHeaderContact(currentTemplateKey, contactText);
-      subHeader.style.display = contactText.trim() ? 'block' : 'block';
+      subHeader.style.display = contactText.trim() ? 'block' : 'none';
     }
     document.getElementById('activeTemplateLabel').textContent = 'Template: ' + (templates[currentTemplateKey]?.label || 'Unknown');
   },
@@ -803,15 +780,18 @@ const Settings = {
     cvSettings.pagePadding = parseInt(document.getElementById('pagePadding').value, 10);
     Settings.loadInputs();
     const cvPage = document.querySelector('.cv-page');
-    cvPage.style.fontFamily = cvSettings.fontFamily; cvPage.style.padding = cvSettings.pagePadding + 'px';
-    document.querySelectorAll('.cv-content').forEach(el => { el.style.fontSize = cvSettings.fontSize + 'px'; el.style.lineHeight = cvSettings.lineHeight; });
-    document.querySelectorAll('.cv-section').forEach(el => { el.style.marginBottom = cvSettings.sectionGap + 'px'; });
-    document.querySelectorAll('.cv-section h3').forEach(el => { el.style.fontSize = cvSettings.headingSize + 'px'; });
+    cvPage.style.setProperty('--page-font-family', cvSettings.fontFamily);
+    cvPage.style.setProperty('--body-font-size', cvSettings.fontSize + 'px');
+    cvPage.style.setProperty('--heading-size', cvSettings.headingSize + 'px');
+    cvPage.style.setProperty('--body-line-height', cvSettings.lineHeight);
+    cvPage.style.setProperty('--section-gap', cvSettings.sectionGap + 'px');
+    cvPage.style.setProperty('--page-padding', cvSettings.pagePadding + 'px');
     Settings.applySectionVisibility(); Settings.applySectionOrder(); Preview.updateTemplateRegions(); Preview.updateOverflowWarning(); Store.saveSettingsToStorageOnly(); Sidebar.updateStateIndicators();
   },
   applySectionVisibility() {
     configurableSections.forEach(section => {
-      const sectionEl = document.getElementById('section-' + section.id); if (sectionEl) sectionEl.style.display = cvSettings.visibleSections[section.id] ? 'block' : 'none';
+      const sectionEl = document.getElementById('section-' + section.id);
+      if (sectionEl) sectionEl.hidden = !cvSettings.visibleSections[section.id];
     });
   },
   applySectionOrder() {
@@ -837,7 +817,6 @@ const Settings = {
 const Templates = {
   orderedKeys: ['europass', 'ats', 'asian', 'academic', 'modernresume', 'executiveresume', 'creativeResume', 'minimalresume'],
   thumbHTML(key) {
-    const t = templates[key];
     const accent = key === 'europass' ? '#0b4ea2' : key === 'asian' ? '#111' : key === 'modernresume' ? '#1a4f9c' : key === 'creativeResume' ? '#ef6c00' : '#222';
     if (key === 'europass') return `<div class="template-thumb"><div class="template-thumb-inner" style="border-left:8px solid ${accent}"><div class="thumb-header"><div class="thumb-meta" style="background:${accent};width:38%"></div><div class="thumb-name" style="width:28%"></div></div><div class="thumb-cols"><div class="thumb-col-left"><div class="line" style="background:${accent};width:70%"></div><div class="line short"></div><div class="line"></div></div><div class="thumb-col-right"><div class="line"></div><div class="line"></div><div class="line short"></div></div></div></div></div>`;
     if (key === 'ats') return `<div class="template-thumb"><div class="template-thumb-inner"><div class="thumb-header"><div class="thumb-name"></div><div class="thumb-meta"></div></div><div class="thumb-rule"></div><div class="thumb-stack"><div class="line"></div><div class="line short"></div><div class="thumb-rule" style="height:1px"></div><div class="line"></div><div class="line"></div><div class="line short"></div></div></div></div>`;
@@ -869,95 +848,59 @@ const Templates = {
 };
 
 const Editor = {
-open(event, section) {
-  if (event) event.preventDefault();
-  currentSection = section;
-
-  const isNameSection = section === 'cvName';
-  const isTitleSection = section === 'cvTitle';
-  const isHeaderSection = isNameSection || isTitleSection;
-
-  const headerFields = document.getElementById('editorHeaderFields');
-  const quickNameWrap = document.getElementById('quickNameWrap');
-  const quickTitleWrap = document.getElementById('quickTitleWrap');
-  const editorInput = document.getElementById('editorInput');
-
-  document.getElementById('editorTitle').textContent = 'Edit ' + titleMap[section];
-  document.getElementById('editorHint').textContent = hintMap[section] || 'Use plain text, bullets, and line breaks.';
-
-  document.getElementById('quickNameInput').value = document.getElementById('cvName').textContent;
-  document.getElementById('quickTitleInput').value = document.getElementById('cvTitle').textContent;
-
-  if (isHeaderSection) {
-    headerFields.style.display = 'grid';
-    quickNameWrap.style.display = isNameSection ? 'block' : 'none';
-    quickTitleWrap.style.display = isTitleSection ? 'block' : 'none';
-    editorInput.style.display = 'none';
-    editorInput.value = '';
-  } else {
-    headerFields.style.display = 'none';
-    quickNameWrap.style.display = 'block';
-    quickTitleWrap.style.display = 'block';
-    editorInput.style.display = 'block';
-    editorInput.value = Preview.getRaw(section);
-  }
-
-  Panels.open('editorBox');
-  Panels.hide('settingsPanel');
-  Panels.hide('templatePanel');
-
-  Preview.setActiveSection(section);
-  Sidebar.updateStateIndicators();
-
-  if (isNameSection) {
-    document.getElementById('quickNameInput').focus();
-  } else if (isTitleSection) {
-    document.getElementById('quickTitleInput').focus();
-  } else {
-    editorInput.focus();
-  }
-},
-
-  saveContent() {
-  if (!currentSection) return;
-
-  if (currentSection === 'cvName') {
-    Preview.setHeaderField('cvName', document.getElementById('quickNameInput').value || defaultCV.cvName);
-  } else if (currentSection === 'cvTitle') {
-    Preview.setHeaderField('cvTitle', document.getElementById('quickTitleInput').value || defaultCV.cvTitle);
-  } else {
-    const value = document.getElementById('editorInput').value;
-    Preview.setRaw(currentSection, value);
-    Preview.setHeaderField('cvName', document.getElementById('quickNameInput').value || defaultCV.cvName);
-    Preview.setHeaderField('cvTitle', document.getElementById('quickTitleInput').value || defaultCV.cvTitle);
-  }
-
-  Preview.refreshAllContent();
-  Store.saveLocalData();
-  Sidebar.updateStateIndicators();
-  Status.setDirty(false);
-  Status.update(titleMap[currentSection] + ' updated and saved.');
-},
-  close(event) { if (event) event.preventDefault(); Panels.hide('editorBox'); document.querySelectorAll('.active-editing').forEach(el => el.classList.remove('active-editing')); },
-  insertAtCursor(text) {
-    const ta = document.getElementById('editorInput');
-    const start = ta.selectionStart, end = ta.selectionEnd;
-    ta.value = ta.value.slice(0, start) + text + ta.value.slice(end);
-    ta.selectionStart = ta.selectionEnd = start + text.length;
-    ta.focus(); Editor.previewEditorContent();
-  },
-  convertSelectionToBullets() {
-    const ta = document.getElementById('editorInput');
-    const start = ta.selectionStart, end = ta.selectionEnd;
-    const selected = ta.value.slice(start, end) || ta.value;
-    const converted = selected.split('\n').map(line => line.trim()).filter(Boolean).map(line => line.startsWith('•') ? line : '• ' + line).join('\n');
-    if (ta.selectionStart !== ta.selectionEnd) {
-      ta.value = ta.value.slice(0, start) + converted + ta.value.slice(end);
+  open(event, section) {
+    if (event) event.preventDefault();
+    currentSection = section;
+    const isNameSection = section === 'cvName';
+    const isTitleSection = section === 'cvTitle';
+    const isHeaderSection = isNameSection || isTitleSection;
+    const headerFields = document.getElementById('editorHeaderFields');
+    const quickNameWrap = document.getElementById('quickNameWrap');
+    const quickTitleWrap = document.getElementById('quickTitleWrap');
+    const editorInput = document.getElementById('editorInput');
+    document.getElementById('editorTitle').textContent = 'Edit ' + titleMap[section];
+    document.getElementById('editorHint').textContent = hintMap[section] || 'Use plain text, bullets, and line breaks.';
+    document.getElementById('quickNameInput').value = document.getElementById('cvName').textContent;
+    document.getElementById('quickTitleInput').value = document.getElementById('cvTitle').textContent;
+    if (isHeaderSection) {
+      headerFields.style.display = 'grid';
+      quickNameWrap.style.display = isNameSection ? 'block' : 'none';
+      quickTitleWrap.style.display = isTitleSection ? 'block' : 'none';
+      editorInput.style.display = 'none';
+      editorInput.value = '';
     } else {
-      ta.value = converted;
+      headerFields.style.display = 'none';
+      quickNameWrap.style.display = 'block';
+      quickTitleWrap.style.display = 'block';
+      editorInput.style.display = 'block';
+      editorInput.value = Preview.getRaw(section);
     }
-    Editor.previewEditorContent();
+    Panels.open('editorBox');
+    Panels.hide('settingsPanel');
+    Panels.hide('templatePanel');
+    Preview.setActiveSection(section);
+    Sidebar.updateStateIndicators();
+    if (isNameSection) document.getElementById('quickNameInput').focus();
+    else if (isTitleSection) document.getElementById('quickTitleInput').focus();
+    else editorInput.focus();
   },
+  saveContent() {
+    if (!currentSection) return;
+    if (currentSection === 'cvName') Preview.setHeaderField('cvName', document.getElementById('quickNameInput').value || defaultCV.cvName);
+    else if (currentSection === 'cvTitle') Preview.setHeaderField('cvTitle', document.getElementById('quickTitleInput').value || defaultCV.cvTitle);
+    else {
+      const value = document.getElementById('editorInput').value;
+      Preview.setRaw(currentSection, value);
+      Preview.setHeaderField('cvName', document.getElementById('quickNameInput').value || defaultCV.cvName);
+      Preview.setHeaderField('cvTitle', document.getElementById('quickTitleInput').value || defaultCV.cvTitle);
+    }
+    Preview.refreshAllContent();
+    Store.saveLocalData();
+    Sidebar.updateStateIndicators();
+    Status.setDirty(false);
+    Status.update(titleMap[currentSection] + ' updated and saved.');
+  },
+  close(event) { if (event) event.preventDefault(); Panels.hide('editorBox'); document.querySelectorAll('.active-editing').forEach(el => el.classList.remove('active-editing')); },
   previewEditorContent() {
     if (!currentSection) return;
     const value = document.getElementById('editorInput').value;
@@ -1023,7 +966,6 @@ document.getElementById('quickNameInput').addEventListener('input', () => {
   Sidebar.updateStateIndicators();
   Status.markDirty('Name updated.');
 });
-
 document.getElementById('quickTitleInput').addEventListener('input', () => {
   Preview.setHeaderField('cvTitle', document.getElementById('quickTitleInput').value || defaultCV.cvTitle);
   Preview.refreshAllContent();
