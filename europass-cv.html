@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Europass curriculum vitae — Jawwad Hussain</title>
+
+ <style>
+  :root{
+    --blue:#0b4ea2;        /* Europass-like blue */
+    --text:#111;
+    --muted:#4a4a4a;
+    --rule:#cfd7e3;
+    --paper:#fff;
+    --preview:#eef1f6;
+
+    /* Typographic system */
+    --base: 11.2pt;        /* body size */
+    --small: 10.2pt;       /* labels */
+    --h1: 18pt;            /* name */
+    --doc: 13.5pt;         /* "Europass curriculum vitae" */
+    --sec: 11.2pt;         /* section headings */
+  }
+
+  html, body{
+    margin:0;
+    padding:0;
+    background: var(--preview);
+    color: var(--text);
+    font-family: Calibri, "Segoe UI", Arial, Helvetica, sans-serif;
+    font-size: var(--base);
+    line-height: 1.35;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .page{
+    width: 210mm;
+    min-height: 297mm;
+    margin: 10mm auto;
+    background: var(--paper);
+    box-shadow: 0 2mm 8mm rgba(0,0,0,.12);
+    box-sizing: border-box;
+    padding: 14mm;
+  }
+
+  @page{
+    size: A4;
+    margin: 14mm;
+  }
+
+  @media print{
+    html, body{ background:#fff; }
+    .page{ width:auto; min-height:auto; margin:0; padding:0; box-shadow:none; }
+    a{ color: inherit; text-decoration: none; }
+  }
+
+  /* ===== Top line ===== */
+  .topline{
+    display:flex;
+    align-items:flex-end;
+    justify-content: space-between;
+    gap: 10mm;
+    margin: 0 0 9mm 0;
+    padding-bottom: 3mm;
+    border-bottom: 2px solid var(--rule);
+  }
+
+  .topline .doc{
+    font-size: var(--doc);
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: .2px;
+    text-transform: lowercase;
+  }
+
+  .topline .name{
+    margin:0;
+    font-size: var(--h1);
+    line-height: 1.08;
+    font-weight: 800;
+    letter-spacing: .2px;
+    text-align:right;
+  }
+
+  /* ===== Europass form table ===== */
+  .cv{
+    width:100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .cv col.left{ width: 34%; }
+  .cv col.right{ width: 66%; }
+
+  .cv td{
+    vertical-align: top;
+    padding: 5pt 6pt;
+  }
+
+  /* Section heading sits in LEFT column in classic Europass */
+  .sec{
+    color: var(--blue);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .35px;
+    font-size: var(--sec);
+    padding-top: 10pt !important;
+    padding-bottom: 6pt !important;
+  }
+
+  /* Left labels: clearer + smaller + consistent */
+  .lbl{
+    color: var(--blue);
+    font-weight: 700;
+    font-size: var(--small);
+    line-height: 1.25;
+  }
+
+  /* Right values: readable and consistent */
+  .val{
+    color: var(--text);
+    line-height: 1.35;
+  }
+
+  /* Row separator (Europass-like breathing space) */
+  .rule td{
+    padding: 0;
+    height: 10pt;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* Content typography */
+  .muted{ color: var(--muted); }
+
+  ul{
+    margin: 4pt 0 0 16pt;
+    padding: 0;
+  }
+  li{ margin: 2.5pt 0; }
+
+  /* Optional photo box: cleaner */
+  .photo{
+  width: 20mm;          /* Europass typical size */
+  height: 26mm;         /* passport ratio */
+  object-fit: cover;    /* prevents distortion */
+  border: 1px solid #cfd7e3;
+  display:block;
+}
+
+  /* Keep blocks together in print */
+  tr{ break-inside: avoid; page-break-inside: avoid; }
+</style>
+</head>
+
+<body>
+  <div class="page">
+
+    <div class="topline">
+      <div class="doc">Europass <span>curriculum vitae</span></div>
+      <p class="name">Jawwad Hussain</p>
+    </div>
+
+    <table class="cv" aria-label="Europass CV">
+      <colgroup>
+        <col class="left" />
+        <col class="right" />
+      </colgroup>
+
+      <!-- PERSONAL INFORMATION -->
+     <tr>
+  <td class="sec">PERSONAL INFORMATION</td>
+  <td class="val">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <div>
+        <strong>Muhammad Basim </strong><br/>
+        Faisalabad 38850, Pakistan<br/>
+        +92 306 688 2510<br/>
+        Jawwadh47@gmail.com
+      </div>
+      <img class="photo" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhPy70E8Uv1zxAoUkmJSStnL3dRDAcQrXugfXVxHfbv3qRLDKV1cqJJR3iNR8HfvMEXdJrjFYdD2wJLytfN7m3yVZvyPou2mVbqSoxPgL4TkhaPYfU8LdMOowO2qyzSY9BNnNNu1vMTF7IkmtqXC7clXg8xdqtIKkzkZvBnJVmdvP62TQzcklwgOLZLwWnf/s400/Jawwad%20Hussain.jpg" alt="Jawwad Hussain">
+    </div>
+  </td>
+</tr>
+
+      <tr>
+        <td class="lbl">Applied for</td>
+        <td class="val">English Educator / School Administrator</td>
+      </tr>
+
+      
+
+      <tr class="rule"><td colspan="2"></td></tr>
+
+      <!-- WORK EXPERIENCE -->
+      <tr>
+        <td class="sec">WORK EXPERIENCE</td>
+        <td class="val"></td>
+      </tr>
+
+      <tr>
+        <td class="lbl">Duration</td>
+        <td class="val"><strong>May 2025 – Present</strong></td>
+      </tr>
+      <tr>
+        <td class="lbl">Occupation / position held</td>
+        <td class="val">English Instructor</td>
+      </tr>
+      <tr>
+        <td class="lbl">Main activities and responsibilities</td>
+        <td class="val">
+          <ul>
+            <li>Designed course materials aligned with learner needs and institutional standards.</li>
+            <li>Delivered outcomes-based instruction, combining explicit language focus with communicative practice.</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td class="lbl">Name and address of employer</td>
+        <td class="val">Lyceum English &amp; Technical Skills Center, Faisalabad</td>
+      </tr>
+
+      <tr class="rule"><td colspan="2"></td></tr>
+
+      <tr>
+        <td class="lbl">Duration</td>
+        <td class="val"><strong>Aug 2023 – Apr 2025</strong></td>
+      </tr>
+      <tr>
+        <td class="lbl">Occupation / position held</td>
+        <td class="val">Vice Principal</td>
+      </tr>
+      <tr>
+        <td class="lbl">Main activities and responsibilities</td>
+        <td class="val">
+          <ul>
+            <li>Prepared academic reports and official correspondence supporting school operations.</li>
+            <li>Worked with teachers on lesson planning, implementation quality, and alignment to curriculum outcomes.</li>
+            <li>Supported consistency in assessment design and classroom task design across grades.</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td class="lbl">Name and address of employer</td>
+        <td class="val">Wisdom House School System, Faisalabad</td>
+      </tr>
+
+      <tr class="rule"><td colspan="2"></td></tr>
+
+      <tr>
+        <td class="lbl">Duration</td>
+        <td class="val"><strong>Aug 2020 – Apr 2023</strong></td>
+      </tr>
+      <tr>
+        <td class="lbl">Occupation / position held</td>
+        <td class="val">English Teacher (Subject Specialist)</td>
+      </tr>
+      <tr>
+        <td class="lbl">Main activities and responsibilities</td>
+        <td class="val">
+          <ul>
+            <li>Taught English to elementary and high school classes as a subject specialist.</li>
+            <li>Maintained continuity of learning through online instruction during COVID-19 disruptions.</li>
+            <li>Prepared lessons and handouts aligned with SNC-based PTB syllabus requirements.</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td class="lbl">Name and address of employer</td>
+        <td class="val">Wisdom House School System, Faisalabad</td>
+      </tr>
+
+      <tr class="rule"><td colspan="2"></td></tr>
+
+      <tr>
+        <td class="lbl">Duration</td>
+        <td class="val"><strong>Mar 2019 – Feb 2020</strong></td>
+      </tr>
+      <tr>
+        <td class="lbl">Occupation / position held</td>
+        <td class="val">English Teacher</td>
+      </tr>
+      <tr>
+        <td class="lbl">Main activities and responsibilities</td>
+        <td class="val">
+          <ul>
+            <li>Developed lesson plans emphasizing structured writing, communication, and critical thinking.</li>
+            <li>Designed unit plans and test papers aligned to syllabus requirements.</li>
+            <li>Provided individualized feedback and mentoring for student development.</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td class="lbl">Name and address of employer</td>
+        <td class="val">Eagles School System, Faisalabad</td>
+      </tr>
+
+      <tr class="rule"><td colspan="2"></td></tr>
+
+      <tr>
+        <td class="lbl">Duration</td>
+        <td class="val"><strong>Aug 2015 – May 2017</strong></td>
+      </tr>
+      <tr>
+        <td class="lbl">Occupation / position held</td>
+        <td class="val">English Teacher</td>
+      </tr>
+      <tr>
+        <td class="lbl">Main activities and responsibilities</td>
+        <td class="val">
+          <ul>
+            <li>Delivered syllabus-aligned instruction using methodical, student-centred teaching strategies.</li>
+            <li>Supported student language development through targeted practice and reinforcement.</li>
+            <li>Facilitated extracurricular activities contributing to holistic student development.</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td class="lbl">Name and address of employer</td>
+        <td class="val">Abdalian Higher Secondary School, Kamalia</td>
+      </tr>
+
+      <tr class="rule"><td colspan="2"></td></tr>
+
+      <!-- EDUCATION AND TRAINING -->
+      <tr>
+        <td class="sec">EDUCATION AND TRAINING</td>
+        <td class="val"></td>
+      </tr>
+
+      <tr>
+        <td class="lbl">Session</td>
+        <td class="val"><strong>2017 – 2019</strong></td>
+      </tr>
+      <tr>
+        <td class="lbl">Title of qualification awarded</td>
+        <td class="val">M.A. in English</td>
+      </tr>
+      <tr>
+        <td class="lbl">Name and type of organisation providing education and training</td>
+        <td class="val">Government College University, Faisalabad</td>
+      </tr>
+      <tr>
+        <td class="lbl">Level in national or international classification</td>
+        <td class="val muted">Cumulative GPA: 3.34 / 4.00</td>
+      </tr>
+
+      <tr class="rule"><td colspan="2"></td></tr>
+
+      <tr>
+        <td class="lbl">Session</td>
+        <td class="val"><strong>2019 – 2021</strong></td>
+      </tr>
+      <tr>
+        <td class="lbl">Title of qualification awarded</td>
+        <td class="val">B.Ed. (Secondary), 1.5 years</td>
+      </tr>
+      <tr>
+        <td class="lbl">Name and type of organisation providing education and training</td>
+        <td class="val">Virtual University of Pakistan</td>
+      </tr>
+      <tr>
+        <td class="lbl">Level in national or international classification</td>
+        <td class="val muted">Cumulative GPA: 3.26 / 4.00</td>
+      </tr>
+
+      <tr class="rule"><td colspan="2"></td></tr>
+
+      <tr>
+        <td class="lbl">Session</td>
+        <td class="val"><strong>2013 – 2015</strong></td>
+      </tr>
+      <tr>
+        <td class="lbl">Title of qualification awarded</td>
+        <td class="val">B.A.</td>
+      </tr>
+      <tr>
+        <td class="lbl">Name and type of organisation providing education and training</td>
+        <td class="val">University of the Punjab, Lahore</td>
+      </tr>
+      <tr>
+        <td class="lbl">Level in national or international classification</td>
+        <td class="val muted">Marks: 527 / 800</td>
+      </tr>
+
+      <tr class="rule"><td colspan="2"></td></tr>
+
+      <!-- PERSONAL SKILLS -->
+      <tr>
+        <td class="sec">PERSONAL SKILLS</td>
+        <td class="val"></td>
+      </tr>
+
+      <tr>
+        <td class="lbl">Mother tongue(s)</td>
+        <td class="val">Urdu, Punjabi</td>
+      </tr>
+
+      <tr>
+        <td class="lbl">Other language(s)</td>
+        <td class="val">
+          English — Advanced<br/>
+          Arabic — Basic
+        </td>
+      </tr>
+
+      <tr>
+        <td class="lbl">Job-related skills</td>
+        <td class="val">
+          <ul>
+            <li>Communicative Language Teaching (CLT); task-based instruction</li>
+            <li>Grammar instruction (form–meaning–use) and error analysis</li>
+            <li>Pronunciation teaching; IPA-based phonetic support and informed practice</li>
+            <li>Academic writing support; feedback on student writing skills</li>
+            <li>Lesson planning; curriculum based pedagogy</li>
+            <li>Assessment preparation; item writing (tests/worksheets)</li>
+          </ul>
+        </td>
+      </tr>
+
+      <tr class="rule"><td colspan="2"></td></tr>
+
+      <!-- ADDITIONAL INFORMATION -->
+      <tr>
+        <td class="sec">ADDITIONAL INFORMATION</td>
+        <td class="val"></td>
+      </tr>
+
+      <tr>
+        <td class="lbl">Publications</td>
+        <td class="val">
+          2025 — <em>When the Heart Grows Up</em>. Amazon Kindle.<br/>
+          2022 — <em>Creative Intelligence for Students</em>. Amazon Kindle.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="lbl">Peer-reviewed publications</td>
+        <td class="val">
+          2024 — Task-based instruction and student writing development in secondary ESL contexts. <em>Journal of Applied Linguistics and Language Research</em>, 11(2), 45–63.<br/>
+          2023 — Feedback practices and revision quality among intermediate-level EFL learners. <em>International Review of English Education</em>, 8(1), 77–92.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="lbl">Conference presentations</td>
+        <td class="val">
+          Mar 2024 — Enhancing argument structure in secondary-level ESL writing. International Conference on Language and Education, Lahore (Paper presentation).<br/>
+          Sep 2023 — Classroom-based feedback cycles and learner autonomy. Punjab ELT Symposium, Faisalabad (Presented talk).
+        </td>
+      </tr>
+
+      <tr>
+        <td class="lbl">Memberships</td>
+        <td class="val">
+          Pakistan English Language Teachers’ Association (PELTA) — Member<br/>
+          TESOL International Association — Member<br/>
+          Applied Linguistics Association of Pakistan — Member
+        </td>
+      </tr>
+
+      <tr>
+        <td class="lbl">References</td>
+        <td class="val">
+          Dr. Ghulam Murtaza Aatir — Head of Department English, GCU, Faisalabad<br/>
+          Phone: +92 (41) 9201413<br/>
+          Email: engliterature@gcuf.edu.pk<br/>
+          <span class="muted">Additional referees available on request.</span>
+        </td>
+      </tr>
+
+    </table>
+  </div>
+</body>
+</html>
